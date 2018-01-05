@@ -7,16 +7,18 @@ import bodyParser from 'body-parser'
 
 import { mongoConnector } from './mongo'
 import { createModels } from './model'
+import { createServices } from './services'
 import schema from './schema'
 
 import { seedDatabase } from './seed'
 
-export const createApp = async (jwtSecret, mongodbUrl) => {
+export const createApp = async (jwtSecret, mongodbUrl, secretKeys) => {
   const collections = await mongoConnector.connect(mongodbUrl)
 
   await seedDatabase(collections)
 
   const models = await createModels(collections)
+  const services = await createServices(secretKeys)
 
   const server = express()
 
@@ -32,7 +34,8 @@ export const createApp = async (jwtSecret, mongodbUrl) => {
   server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress((request) => {
     const context = {
       configuration: { jwtSecret },
-      models
+      models,
+      services
     }
 
     if (request.user != null) {
