@@ -21,6 +21,7 @@ export const connect = async (mongoUrl) => {
     Users: db.collection('users'),
     Facilities: db.collection('facilities'),
     TypesOfWaste: db.collection('typesOfWaste'),
-    Feedbacks: db.collection('feedbacks')
+    Feedbacks: db.collection('feedbacks'),
+    ReverseGeocodingCache: db.collection('reverseGeocodingCache')
   }
 }
