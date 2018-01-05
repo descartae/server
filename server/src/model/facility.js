@@ -1,12 +1,12 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
 
-export default ({ Facilities }) => ({
+export default ({ Facilities, ReverseGeocodingCache }) => ({
   // Root queries
   async facility (_id) {
     return Facilities.findOne({ _id })
   },
-  async facilities ({ cursor, location, hasTypesOfWaste }) {
+  async facilities ({ cursor, location, hasTypesOfWaste }, { Geolocation }) {
     const query = {
       enabled: true
     }
@@ -29,10 +29,22 @@ export default ({ Facilities }) => ({
       query.typesOfWaste = { $in: hasTypesOfWaste }
     }
 
-    if (location != null && location.near != null) {
-      // TODO: convert lat & long into city using geocoding/local cache
-      // query.city = ...
-    }
+    // TODO(edupc): finalize client geocoding caching
+    // if (location != null && location.near != null) {
+    //   let { latitude, longitude } = location.near
+
+    //   // Reduce the precision to a ~110m area
+    //   latitude = parseFloat(latitude.toFixed(3))
+    //   longitude = parseFloat(longitude.toFixed(3))
+
+    //   let city = await ReverseGeocodingCache.findOne({ latitude, longitude })
+
+    //   if (city == null) {
+    //     city = await Geolocation.reverseGeocode({ latitude, longitude })
+    //   }
+
+    //   console.log(city)
+    // }
 
     const items =
       await Facilities
