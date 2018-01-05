@@ -51,11 +51,21 @@ export default ({ Facilities }) => ({
     }
   },
   // Operations
-  async addFacility (data) {
+  async addFacility (data, { Geolocation }) {
     assertNotEmpty(data.name, 'name')
     assertNotEmpty((data.location || {}).address, 'location.address')
 
     assertAny(data.typesOfWaste, 'typesOfWaste')
+
+    const { coordinates } = data.location
+    if (coordinates == null || coordinates.latitude == null || coordinates.longitude == null) {
+      const result = await Geolocation.geocode(data.location.address)
+      
+      data.location = {
+        ...result,
+        ...data.location
+      }
+    }
 
     data = {
       ...data,
