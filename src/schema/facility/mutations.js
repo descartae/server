@@ -3,8 +3,8 @@ export const addFacility =
     addFacility(input, services)
 
 export const updateFacility =
-  (obj, { input }, { models: { Facilities: { updateFacility } } }, info) =>
-    updateFacility(input)
+  (obj, { input }, { models: { Facilities: { updateFacility } }, services }, info) =>
+    updateFacility(input, services)
 
 export const disableFacility =
   (obj, { input }, { models: { Facilities: { disableFacility } } }, info) =>
