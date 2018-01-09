@@ -590,5 +590,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
     await Feedbacks.insert(feedbacks)
 
     Facilities.createIndex({'location.coordinates': '2dsphere'})
+
+    console.log('Seeded!')
   }
 }
