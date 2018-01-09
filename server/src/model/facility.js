@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
+import { find } from 'ramda'
 
 export default ({ Facilities, ReverseGeocodingCache }) => ({
   // Root queries
@@ -29,22 +30,77 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       query.typesOfWaste = { $in: hasTypesOfWaste }
     }
 
-    // TODO(edupc): finalize client geocoding caching
-    // if (location != null && location.near != null) {
-    //   let { latitude, longitude } = location.near
+    if (location != null && location.near != null) {
+      let { latitude, longitude } = location.near
 
-    //   // Reduce the precision to a ~110m area
-    //   latitude = parseFloat(latitude.toFixed(3))
-    //   longitude = parseFloat(longitude.toFixed(3))
+      // Reduce the precision to a ~110m area
+      latitude = parseFloat(latitude.toFixed(3))
+      longitude = parseFloat(longitude.toFixed(3))
 
-    //   let city = await ReverseGeocodingCache.findOne({ latitude, longitude })
+      let city = await ReverseGeocodingCache.findOne({
+        boundaries: {
+          $geoIntersects: {
+            $geometry: {
+              type: "Point",
+              coordinates: [ longitude, latitude ]
+            }
+          }
+        }
+      })
 
-    //   if (city == null) {
-    //     city = await Geolocation.reverseGeocode({ latitude, longitude })
-    //   }
+      let bounds = null
+      if (city) {
+        bounds = city.boundaries.coordinates[0]
+      } else {
+        // TODO next versions should support more detailed shapes
+        city = await Geolocation.reverseGeocode({ latitude, longitude })
 
-    //   console.log(city)
-    // }
+        const cityBoundaries = find(
+          (r) =>
+            find(t => t == 'locality')(r.types) &&
+            find(t => t == 'political')(r.types)
+        )(city.results)
+
+        if (cityBoundaries) {
+          const { northeast, southwest } = cityBoundaries.geometry.viewport
+
+          bounds = [
+            [northeast.lng , northeast.lat],
+            [southwest.lng , northeast.lat],
+            [southwest.lng , southwest.lat],
+            [northeast.lng , southwest.lat],
+            [northeast.lng , northeast.lat]
+          ]
+
+          await ReverseGeocodingCache.insert({
+            location: cityBoundaries.formatted_address,
+            boundaries: {
+              type: "Polygon",
+              coordinates: [ bounds ]
+            }
+          })
+        }
+      }
+
+      if (!bounds) {
+        query.location = {
+          coordinates: {
+            $near: {
+              $geometry: {
+                type: "Point" ,
+                coordinates: [ longitude, latitude ]
+              },
+              $maxDistance: 3000
+            }
+          }
+        }
+      } else {
+        query.coordinates = {
+          $geoWithin: { $polygon: bounds }
+        }
+      }
+    }
+
 
     const items =
       await Facilities
@@ -72,7 +128,7 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
     const { coordinates } = data.location
     if (coordinates == null || coordinates.latitude == null || coordinates.longitude == null) {
       const result = await Geolocation.geocode(data.location.address)
-      
+
       data.location = {
         ...result,
         ...data.location
