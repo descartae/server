@@ -3,3 +3,7 @@ export const whoami = (obj, args, context, info) => {
 
   return id ? `${id}: ${email}` : `anonymous`
 }
+
+export const users =
+  (obj, { filters }, { services: { Auth } }, info) =>
+    Auth.authorizeFor('ADMIN') || users(filters)

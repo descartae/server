@@ -1,15 +1,35 @@
-import jwt from 'jsonwebtoken'
+export const authenticate =
+  async (obj, { credentials: { email, password } }, { models: { Users: { authenticate } }, services: { Auth } }) => {
+    const user = await authenticate({ email, password })
 
-export const authenticate = (obj, args, context, info) => {
-  const id = 'identification'
-  const { email } = args.credentials
+    if (!user) {
+      return {
+        success: false,
+        error: 'INVALID_CREDENTIALS'
+      }
+    }
 
-  const payload = { id, email }
+    const { _id, roles } = user
+    const payload = { id: _id, email, roles }
 
-  const { JWT_SECRET } = context.configuration
-
-  return {
-    success: true,
-    sessionToken: jwt.sign(payload, Buffer.from(JWT_SECRET, 'base64'))
+    return {
+      success: true,
+      sessionToken: await Auth.sign(payload)
+    }
   }
-}
+
+export const addUser =
+  async (obj, { user: { name, email, password, roles } }, { models: { Users: { addUser } }, services: { Auth } }) => {
+    const user = await addUser({ name, email, password, roles })
+
+    if (!user) {
+      return {
+        success: false
+      }
+    }
+
+    return {
+      success: true,
+      user
+    }
+  }

@@ -1,11 +1,13 @@
+
+
 export const addTypeOfWaste =
-  async (obj, { input }, { models: { TypesOfWaste: { addTypeOfWaste } } }, info) =>
-    addTypeOfWaste(input)
+  async (_, { input }, { services: { Auth }, models: { TypesOfWaste: { addTypeOfWaste } } }) =>
+  Auth.authorizeFor('ADMIN') || addTypeOfWaste(input)
 
 export const updateTypeOfWaste =
-  async (obj, { input }, { models: { TypesOfWaste: { updateTypeOfWaste } } }, info) =>
-    updateTypeOfWaste(input)
+  async (_, { input }, { services: { Auth }, models: { TypesOfWaste: { updateTypeOfWaste } } }) =>
+  Auth.authorizeFor('ADMIN') || updateTypeOfWaste(input)
 
 export const disableTypeOfWaste =
-  async (obj, { input }, { models: { TypesOfWaste: { disableTypeOfWaste } } }, info) =>
-    disableTypeOfWaste(input)
+  async (_, { input }, { services: { Auth }, models: { TypesOfWaste: { disableTypeOfWaste } } }) =>
+    Auth.authorizeFor('ADMIN') || disableTypeOfWaste(input)

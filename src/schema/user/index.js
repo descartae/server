@@ -6,31 +6,60 @@ export const schema = `
     _id: ID!
     name: String!
     email: String!
+    roles: [String]!
   }
 
   type AuthenticationResult {
     success: Boolean!
-    # error: AuthenticationFailureReason
+    error: AuthenticationFailureReason
     sessionToken: String
   }
 
-  # TODO: Define what kind of problems to communicate
-  # enum AuthenticationFailureReason {
-  #   INVALID_CREDENTIALS
-  # }
+  enum AuthenticationFailureReason {
+    INVALID_CREDENTIALS
+  }
 
   input AuthenticationData {
     email: String!
     password: String!
   }
+
+  input AddUserData {
+    name: String!
+    email: String!
+    password: String!
+    roles: [String]!
+  }
+
+  type AddUserResult {
+    success: Boolean!
+    error: AddUserFailureReason
+    sessionToken: String
+  }
+
+  enum AddUserFailureReason {
+    DUPLICATED_EMAIL
+    INVALID_ROLES
+  }
+
+  input UserFilters {
+    cursor: FilterCursors!
+  }
+
+  type UsersPage {
+    cursors: PageCursors!
+    items: [User]
+  }
 `
 
 export const queryExtension = `
   whoami: String
+  users(filters: UserFilters!): UsersPage
 `
 
 export const mutationExtension = `
   authenticate(credentials: AuthenticationData!): AuthenticationResult
+  addUser(user: AddUserData!): AddUserResult
 `
 
 export const resolvers = {

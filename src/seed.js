@@ -56,7 +56,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
     const user = {
       _id: new ObjectId(),
       name: 'Example User',
-      email: 'user@example.com'
+      email: 'user@example.com',
+      password: 'example',
+      roles: ['ADMIN']
     }
 
     const facilities = [{

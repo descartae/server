@@ -1,7 +1,7 @@
 export const addFeedback =
-  (obj, { input }, { models: { Feedbacks: { addFeedback } } }, info) =>
+  (_, { input }, { models: { Feedbacks: { addFeedback } }, user }) =>
     addFeedback(input)
 
 export const resolveFeedback =
-  (obj, { input }, { models: { Feedbacks: { resolveFeedback } } }, info) =>
-    resolveFeedback(input)
+  (_, { input }, { services: { Auth }, models: { Feedbacks: { resolveFeedback } }, user }) =>
+    Auth.authorizeFor('ADMIN', 'MAINTAINER') || resolveFeedback(input)
