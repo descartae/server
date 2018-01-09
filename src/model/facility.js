@@ -1,12 +1,13 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
+import { find } from 'ramda'
 
-export default ({ Facilities }) => ({
+export default ({ Facilities, ReverseGeocodingCache }) => ({
   // Root queries
   async facility (_id) {
     return Facilities.findOne({ _id })
   },
-  async facilities ({ cursor, location, hasTypesOfWaste }) {
+  async facilities ({ cursor, location, hasTypesOfWaste }, { Geolocation }) {
     const query = {
       enabled: true
     }
@@ -30,8 +31,74 @@ export default ({ Facilities }) => ({
     }
 
     if (location != null && location.near != null) {
-      // TODO: convert lat & long into city using geocoding/local cache
-      // query.city = ...
+      let { latitude, longitude } = location.near
+
+      // Reduce the precision to a ~110m area
+      latitude = parseFloat(latitude.toFixed(3))
+      longitude = parseFloat(longitude.toFixed(3))
+
+      let city = await ReverseGeocodingCache.findOne({
+        boundaries: {
+          $geoIntersects: {
+            $geometry: {
+              type: "Point",
+              coordinates: [ longitude, latitude ]
+            }
+          }
+        }
+      })
+
+      let bounds = null
+      if (city) {
+        bounds = city.boundaries.coordinates[0]
+      } else {
+        // TODO next versions should support more detailed shapes
+        city = await Geolocation.reverseGeocode({ latitude, longitude })
+
+        const cityBoundaries = find(
+          (r) =>
+            find(t => t == 'locality')(r.types) &&
+            find(t => t == 'political')(r.types)
+        )(city.results)
+
+        if (cityBoundaries) {
+          const { northeast, southwest } = cityBoundaries.geometry.viewport
+
+          bounds = [
+            [northeast.lng , northeast.lat],
+            [southwest.lng , northeast.lat],
+            [southwest.lng , southwest.lat],
+            [northeast.lng , southwest.lat],
+            [northeast.lng , northeast.lat]
+          ]
+
+          await ReverseGeocodingCache.insert({
+            location: cityBoundaries.formatted_address,
+            boundaries: {
+              type: "Polygon",
+              coordinates: [ bounds ]
+            }
+          })
+        }
+      }
+
+      if (!bounds) {
+        query.location = {
+          coordinates: {
+            $near: {
+              $geometry: {
+                type: "Point" ,
+                coordinates: [ longitude, latitude ]
+              },
+              $maxDistance: 3000
+            }
+          }
+        }
+      } else {
+        query.coordinates = {
+          $geoWithin: { $polygon: bounds }
+        }
+      }
     }
 
     const items =
@@ -51,11 +118,21 @@ export default ({ Facilities }) => ({
     }
   },
   // Operations
-  async addFacility (data) {
+  async addFacility (data, { Geolocation }) {
     assertNotEmpty(data.name, 'name')
     assertNotEmpty((data.location || {}).address, 'location.address')
 
     assertAny(data.typesOfWaste, 'typesOfWaste')
+
+    const { coordinates } = data.location
+    if (coordinates == null || coordinates.latitude == null || coordinates.longitude == null) {
+      const result = await Geolocation.geocode(data.location.address)
+
+      data.location = {
+        ...result,
+        ...data.location
+      }
+    }
 
     data = {
       ...data,

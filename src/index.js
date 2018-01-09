@@ -6,8 +6,11 @@ import { createApp } from './app'
 const SERVER_PORT = process.env.SERVER_PORT
 const JWT_SECRET = process.env.JWT_SECRET
 const MONGODB_URL = process.env.MONGODB_URL
+const MAPS_API_KEY = process.env.MAPS_API_KEY
 
-createApp(JWT_SECRET, MONGODB_URL)
+const secrets = { JWT_SECRET, MAPS_API_KEY }
+
+createApp(MONGODB_URL, secrets)
   .then((createdApp) => {
     let currentApp = createdApp
     const server = http.createServer(currentApp)
@@ -17,7 +20,7 @@ createApp(JWT_SECRET, MONGODB_URL)
     if (module.hot) {
       module.hot.accept('./app', async () => {
         const { createApp } = require('./app')
-        const newApp = await createApp(JWT_SECRET, MONGODB_URL)
+        const newApp = await createApp(MONGODB_URL, secrets)
 
         server.removeListener('request', currentApp)
         server.on('request', newApp)
