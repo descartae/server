@@ -12,13 +12,10 @@ import schema from './schema'
 
 import { seedDatabase } from './seed'
 
-export const createApp = async (jwtSecret, mongodbUrl, secretKeys) => {
+export const createApp = async (mongodbUrl, secrets) => {
   const collections = await mongoConnector.connect(mongodbUrl)
 
   await seedDatabase(collections)
-
-  const models = await createModels(collections)
-  const services = await createServices(secretKeys)
 
   const server = express()
 
@@ -26,21 +23,23 @@ export const createApp = async (jwtSecret, mongodbUrl, secretKeys) => {
 
   const authMiddleware =
     jwt({
-      secret: Buffer.from(jwtSecret, 'base64'),
+      secret: Buffer.from(secrets.JWT_SECRET, 'base64'),
       credentialsRequired: false
     })
 
   server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
-  server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress((request) => {
+  server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress(async (request, response) => {
     const context = {
-      configuration: { jwtSecret },
-      models,
-      services
+      configuration: { secrets },
+      models: await createModels(collections),
+      secrets
     }
 
     if (request.user != null) {
       context.user = request.user
     }
+
+    context.services = await createServices(context)
 
     return {
       schema,

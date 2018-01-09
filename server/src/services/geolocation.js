@@ -1,6 +1,7 @@
 import googleMaps from '@google/maps'
 
-export default ({ MAPS_API_KEY }) => {
+export default ({ configuration: { secrets: { MAPS_API_KEY } } }) => {
+
   const client = googleMaps.createClient({
     key: MAPS_API_KEY
   })
@@ -23,7 +24,7 @@ export default ({ MAPS_API_KEY }) => {
 
           const { address_components, geometry } = data
 
-          const findByType = (target) => 
+          const findByType = (target) =>
             address_components.filter(it => it.types.includes(target))[0].long_name
 
           const location = {

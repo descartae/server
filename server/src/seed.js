@@ -471,5 +471,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
     await TypesOfWaste.insert(typesOfWaste)
     await Facilities.insert(facilities)
     await Feedbacks.insert(feedbacks)
+
+    Facilities.createIndex({'location.coordinates': '2dsphere'})
   }
 }

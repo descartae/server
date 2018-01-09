@@ -172,7 +172,7 @@ export const schema = `
   type UpdateFacilityPayload {
     # Indicates whether the operation was successful
     success: Boolean!
-    
+
     # The updated entry, if applicable
     facility: Facility
   }
