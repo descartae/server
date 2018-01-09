@@ -17,7 +17,7 @@ services:
     command: npm run build:watch
     restart: always
     volumes:
-      - ./server:/opt/app
+      - .:/opt/app
       - /opt/app/node_modules
     ports:
       - 4000:4000
@@ -27,22 +27,6 @@ services:
       - MONGODB_URL=mongodb://mongodb:27017/webportal
     depends_on:
       - mongodb
-    networks:
-      - descartae
-
-  webportal-client:
-    container_name: client.webportal.descartae
-    image: descartae/webportal-client
-    command: npm run build:watch
-    restart: always
-    volumes:
-      - ./client:/opt/app
-      - /opt/app/node_modules
-    ports:
-      - 3000:3000
-    environment:
-      - PORT=3000
-      - REACT_APP_SERVER_URL=http://localhost:4000/graphql
     networks:
       - descartae
 
