@@ -17,7 +17,7 @@ services:
     command: npm run build:watch
     restart: always
     volumes:
-      - ./server:/opt/app
+      - .:/opt/app
       - /opt/app/node_modules
     ports:
       - 4000:4000
