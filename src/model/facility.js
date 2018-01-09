@@ -101,7 +101,6 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       }
     }
 
-
     const items =
       await Facilities
         .find(query)
