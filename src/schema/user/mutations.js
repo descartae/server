@@ -5,7 +5,7 @@ const hashPassword = async (password) =>
 
 export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
-    const user = await userByEmail({ email })
+    const user = await userByEmail(email)
 
     if (!user || !await compare(password, user.password)) {
       const avoidBruteForceTimer = () => {
