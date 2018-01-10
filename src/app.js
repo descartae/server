@@ -18,7 +18,6 @@ export const createApp = async (mongodbUrl, secrets) => {
   await seedDatabase(collections)
 
   const server = express()
-
   server.use(cors())
 
   const authMiddleware =

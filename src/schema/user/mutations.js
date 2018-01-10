@@ -32,6 +32,8 @@ export const authenticate =
 
 export const addUser =
   async (obj, { user: { name, email, password, roles } }, { models: { Users: { addUser } }, services: { Auth } }) => {
+    Auth.authorizeFor('ADMIN')
+
     const hash = await hashPassword(password)
     const user = await addUser({ name, email, password: hash, roles })
 
