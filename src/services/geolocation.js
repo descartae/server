@@ -1,7 +1,7 @@
 import googleMaps from '@google/maps'
+import { find } from 'ramda'
 
-export default ({ configuration: { secrets: { MAPS_API_KEY } } }) => {
-
+export default ({ models: { ReverseGeocodingCache }, configuration: { secrets: { MAPS_API_KEY } } }) => {
   const client = googleMaps.createClient({
     key: MAPS_API_KEY
   })
@@ -55,6 +55,41 @@ export default ({ configuration: { secrets: { MAPS_API_KEY } } }) => {
           resolve(response.json)
         })
       })
+    },
+    async boundaries ({ latitude, longitude }) {
+      let city = await ReverseGeocodingCache.fromCache({ latitude, longitude })
+      if (city) {
+        return city.boundaries.coordinates[0]
+      } else {
+        // TODO next versions should support more detailed shapes
+        city = await this.reverseGeocode({ latitude, longitude })
+
+        const cityBoundaries = find(
+          (r) =>
+            find(t => t == 'locality')(r.types) &&
+            find(t => t == 'political')(r.types)
+        )(city.results)
+
+        if (cityBoundaries) {
+          const { northeast, southwest } = cityBoundaries.geometry.viewport
+
+          const bounds = [
+            [southwest.lng , northeast.lat],
+            [northeast.lng , northeast.lat],
+            [northeast.lng , southwest.lat],
+            [southwest.lng , southwest.lat],
+            [southwest.lng , northeast.lat]
+          ]
+
+          await ReverseGeocodingCache.addToCache({
+            location: cityBoundaries.formatted_address,
+            bounds
+          })
+
+          return bounds
+        }
+      }
+
     }
   }
 }

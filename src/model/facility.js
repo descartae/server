@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
-import { find } from 'ramda'
 
 export default ({ Facilities, ReverseGeocodingCache }) => ({
   // Root queries
@@ -30,81 +29,40 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       query.typesOfWaste = { $in: hasTypesOfWaste }
     }
 
+    let aggregation
     if (location != null && location.near != null) {
-      let { latitude, longitude } = location.near
+      const { latitude, longitude } = location.near
+      const bounds = await Geolocation.boundaries({ latitude, longitude })
 
-      // Reduce the precision to a ~110m area
-      latitude = parseFloat(latitude.toFixed(3))
-      longitude = parseFloat(longitude.toFixed(3))
-
-      let city = await ReverseGeocodingCache.findOne({
-        boundaries: {
-          $geoIntersects: {
-            $geometry: {
-              type: "Point",
-              coordinates: [ longitude, latitude ]
-            }
-          }
-        }
-      })
-
-      let bounds = null
-      if (city) {
-        bounds = city.boundaries.coordinates[0]
-      } else {
-        // TODO next versions should support more detailed shapes
-        city = await Geolocation.reverseGeocode({ latitude, longitude })
-
-        const cityBoundaries = find(
-          (r) =>
-            find(t => t == 'locality')(r.types) &&
-            find(t => t == 'political')(r.types)
-        )(city.results)
-
-        if (cityBoundaries) {
-          const { northeast, southwest } = cityBoundaries.geometry.viewport
-
-          bounds = [
-            [northeast.lng , northeast.lat],
-            [southwest.lng , northeast.lat],
-            [southwest.lng , southwest.lat],
-            [northeast.lng , southwest.lat],
-            [northeast.lng , northeast.lat]
-          ]
-
-          await ReverseGeocodingCache.insert({
-            location: cityBoundaries.formatted_address,
-            boundaries: {
-              type: "Polygon",
-              coordinates: [ bounds ]
-            }
-          })
-        }
-      }
-
-      if (!bounds) {
-        query.location = {
-          coordinates: {
-            $near: {
-              $geometry: {
-                type: "Point" ,
-                coordinates: [ longitude, latitude ]
-              },
-              $maxDistance: 3000
-            }
-          }
-        }
-      } else {
-        query.coordinates = {
+      if (bounds) {
+        query['location.coordinates'] = {
           $geoWithin: { $polygon: bounds }
         }
       }
+
+      aggregation = [
+        {
+          $geoNear : {
+            query,
+            near: [ longitude, latitude ],
+            distanceField: 'distance',
+            spherical: true,
+            maxDistance: bounds ? 200000 : 20000
+          }
+        },
+        { $sort: { distance: 1 } },
+        { $limit: cursor.quantity }
+      ]
+    } else {
+      aggregation = [
+        { $match: query },
+        { $limit: cursor.quantity }
+      ]
     }
 
     const items =
       await Facilities
-        .find(query)
-        .limit(cursor.quantity)
+        .aggregate(aggregation)
         .toArray()
 
     const cursors = {
