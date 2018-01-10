@@ -23,10 +23,24 @@ export const createApp = async (mongodbUrl, secrets) => {
   const authMiddleware =
     jwt({
       secret: Buffer.from(secrets.JWT_SECRET, 'base64'),
-      credentialsRequired: false
+      credentialsRequired: false,
+      getToken: (req) => {
+        if (
+          req.headers.authorization &&
+          req.headers.authorization.split(' ')[0] === 'Bearer'
+        ) {
+          return req.headers.authorization.split(' ')[1]
+        } else if (req.query && req.query.token) {
+          return req.query.token
+        }
+        return null
+      }
     })
 
-  server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
+  server.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql'
+  }))
+
   server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress(async (request, response) => {
     const context = {
       configuration: { secrets },
