@@ -2,11 +2,18 @@ import * as mutations from './mutations'
 import * as queries from './queries'
 
 export const schema = `
+
+  enum Role {
+    ADMIN
+    MAINTAINER
+    USER
+  }
+
   type User {
     _id: ID!
     name: String!
     email: String!
-    roles: [String]!
+    roles: [Role]!
   }
 
   type AuthenticationResult {
@@ -28,7 +35,7 @@ export const schema = `
     name: String!
     email: String!
     password: String!
-    roles: [String]!
+    roles: [Role]!
   }
 
   type AddUserResult {
