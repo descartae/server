@@ -148,13 +148,22 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       facility
     }
   },
-  async updateFacility ({ _id, patch }) {
+  async updateFacility ({ _id, patch }, { Geolocation }) {
     if ('name' in patch) {
       assertNotEmpty(patch.name, 'name')
     }
 
     if ('location' in patch && 'address' in patch.location) {
       assertNotEmpty(patch.location.address)
+
+      const { coordinates } = patch.location
+      if (coordinates == null || coordinates.latitude == null || coordinates.longitude == null) {
+        const result = await Geolocation.geocode(patch.location.address)
+        patch.location = {
+          ...result,
+          ...patch.location
+        }
+      }
     }
 
     if ('typesOfWaste' in patch) {

@@ -2,6 +2,11 @@ import { ObjectId } from 'mongodb'
 import { genSalt, hash } from 'bcryptjs'
 
 export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks }) => {
+  // await Facilities.deleteMany({})
+  // await Users.deleteMany({})
+  // await TypesOfWaste.deleteMany({})
+  // await Feedbacks.deleteMany({})
+
   const facilityCount = await Facilities.count()
   const userCount = await Users.count()
   const typesOfWasteCount = await TypesOfWaste.count()
@@ -13,45 +18,157 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
       {
         _id: new ObjectId(),
         name: 'Alumínio',
-        description: 'Peças diversas feitas de alumínio',
+        description: '',
         icons: {
-          iosSmallURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/iossmallalluminium.png',
-          iosMediumURL: 'http://example.com/aluminium.png',
-          iosLargeURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/ioslargealluminium.png',
-          androidSmallURL: 'http://example.com/aluminium.png',
-          androidMediumURL: 'http://example.com/aluminium.png',
-          androidLargeURL: 'http://example.com/aluminium.png'
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Orgânico',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Óleo de Cozinha',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Lixo Eletrônico',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Móvel',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Geral',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-large.png',
         },
         enabled: true
       },
       {
         _id: new ObjectId(),
         name: 'Vidro',
-        description: 'Pedaços de vidro ou itens compostos de vidro',
+        description: '',
         icons: {
-          iosSmallURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/iossmallglass.png',
-          iosMediumURL: 'http://example.com/glass.png',
-          iosLargeURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/ioslargeglass.png',
-          androidSmallURL: 'http://example.com/glass.png',
-          androidMediumURL: 'http://example.com/glass.png',
-          androidLargeURL: 'http://example.com/glass.png'
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Lixo Verde',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-large.png',
+        },
+        enabled: true
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Resíduo Perigoso',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-large.png',
         },
         enabled: true
       },
       {
         _id: new ObjectId(),
         name: 'Papel',
-        description: 'Descarte de folhas e itens feitos inteiramente de papel',
+        description: '',
         icons: {
-          iosSmallURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/iossmallpaper.png',
-          iosMediumURL: 'http://example.com/paper.png',
-          iosLargeURL: 'https://s3-sa-east-1.amazonaws.com/descartae/typesOfWaste/ioslargepaper.png',
-          androidSmallURL: 'http://example.com/paper.png',
-          androidMediumURL: 'http://example.com/paper.png',
-          androidLargeURL: 'http://example.com/paper.png'
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-large.png',
         },
         enabled: true
-      }
+      },
+      {
+        _id: new ObjectId(),
+        name: 'Plástico',
+        description: '',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-large.png',
+        },
+        enabled: true
+      },
     ]
 
     const user = {
@@ -476,5 +593,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
     await Feedbacks.insert(feedbacks)
 
     Facilities.createIndex({'location.coordinates': '2dsphere'})
+
+    console.log('Seeded!')
   }
 }
