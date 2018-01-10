@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { genSalt, hash } from 'bcryptjs'
 
 export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks }) => {
   const facilityCount = await Facilities.count()
@@ -57,7 +58,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
       _id: new ObjectId(),
       name: 'Example User',
       email: 'user@example.com',
-      password: 'example',
+      password: hash('example', await genSalt(12)),
       roles: ['ADMIN']
     }
 
