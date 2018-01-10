@@ -1,9 +1,9 @@
-export const whoami = (obj, args, context, info) => {
+export const whoami = (_, __, context) => {
   const { id, email } = context.user || {}
 
   return id ? `${id}: ${email}` : `anonymous`
 }
 
 export const users =
-  (obj, { filters }, { services: { Auth } }, info) =>
+  (_, { filters }, { models: { Users: { users } }, services: { Auth } }) =>
     Auth.authorizeFor('ADMIN') || users(filters)
