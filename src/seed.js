@@ -175,7 +175,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
       _id: new ObjectId(),
       name: 'Example User',
       email: 'user@example.com',
-      password: hash('example', await genSalt(12)),
+      password: await hash('example', await genSalt(12)),
       roles: ['ADMIN']
     }
 
