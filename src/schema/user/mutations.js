@@ -1,4 +1,4 @@
-const { compare, genSalt, hash } = require('bcryptjs')
+import { compare, genSalt, hash } from 'bcryptjs'
 
 const hashPassword = async (password) =>
   hash(password, await genSalt(12))
