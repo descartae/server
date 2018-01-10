@@ -5,10 +5,10 @@ import { any, all } from 'ramda'
 export default ({ Users }) => ({
   // Root queries
   async user (_id) {
-    return User.findOne({ _id })
+    return Users.findOne({ _id })
   },
   async userByEmail (email) {
-    return User.findOne({ email })
+    return Users.findOne({ email })
   },
   async users ({ cursor }) {
     const query = {}
