@@ -1,8 +1,20 @@
-export const authenticate =
-  async (obj, { credentials: { email, password } }, { models: { Users: { authenticate } }, services: { Auth } }) => {
-    const user = await authenticate({ email, password })
+const { compare, genSalt, hash } = require('bcryptjs')
 
-    if (!user) {
+const hashPassword = async (password) =>
+  hash(password, await genSalt(12))
+
+export const authenticate =
+  async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
+    const user = await userByEmail({ email })
+
+    if (!user || !await compare(password, user.password)) {
+      const avoidBruteForceTimer = () => {
+        const timeout = Math.round(Math.random() * (6 - 2) + 2) * 1000
+        return new Promise((resolve) => setTimeout(() => resolve(), timeout))
+      }
+
+      await avoidBruteForceTimer()
+
       return {
         success: false,
         error: 'INVALID_CREDENTIALS'
@@ -20,7 +32,8 @@ export const authenticate =
 
 export const addUser =
   async (obj, { user: { name, email, password, roles } }, { models: { Users: { addUser } }, services: { Auth } }) => {
-    const user = await addUser({ name, email, password, roles })
+    const hash = await hashPassword(password)
+    const user = await addUser({ name, email, password: hash, roles })
 
     if (!user) {
       return {

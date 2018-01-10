@@ -7,6 +7,9 @@ export default ({ Users }) => ({
   async user (_id) {
     return User.findOne({ _id })
   },
+  async userByEmail (email) {
+    return User.findOne({ email })
+  },
   async users ({ cursor }) {
     const query = {}
 
@@ -41,9 +44,6 @@ export default ({ Users }) => ({
     }
   },
   // Operations
-  async authenticate ({ email, password }) {
-    return Users.findOne({ email })
-  },
   async addUser ({ name, email, password, roles }) {
     const item = {
       name,
