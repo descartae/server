@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { genSalt, hash } from 'bcryptjs'
 
 export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks }) => {
   // await Facilities.deleteMany({})
@@ -173,7 +174,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
     const user = {
       _id: new ObjectId(),
       name: 'Example User',
-      email: 'user@example.com'
+      email: 'user@example.com',
+      password: hash('example', await genSalt(12)),
+      roles: ['ADMIN']
     }
 
     const facilities = [{

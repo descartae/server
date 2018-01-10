@@ -1,11 +1,11 @@
 export const addFacility =
-  (obj, { input }, { models: { Facilities: { addFacility } }, services }, info) =>
-    addFacility(input, services)
+  (obj, { input }, { services: { Auth }, models: { Facilities: { addFacility } }, services }, info) =>
+    Auth.authorizeFor('ADMIN', 'MAINTAINER') || addFacility(input, services)
 
 export const updateFacility =
-  (obj, { input }, { models: { Facilities: { updateFacility } }, services }, info) =>
-    updateFacility(input, services)
+  (obj, { input }, { services: { Auth }, models: { Facilities: { updateFacility } } }, info) =>
+    Auth.authorizeFor('ADMIN', 'MAINTAINER') || updateFacility(input, services)
 
 export const disableFacility =
-  (obj, { input }, { models: { Facilities: { disableFacility } } }, info) =>
-    disableFacility(input)
+  (obj, { input }, { services: { Auth },models: { Facilities: { disableFacility } } }, info) =>
+    Auth.authorizeFor('ADMIN', 'MAINTAINER') || disableFacility(input)
