@@ -1,11 +1,12 @@
 import { ObjectId } from 'mongodb'
 import { genSalt, hash } from 'bcryptjs'
 
-export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks }) => {
+export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks, ReverseGeocodingCache }) => {
   // await Facilities.deleteMany({})
   // await Users.deleteMany({})
   // await TypesOfWaste.deleteMany({})
   // await Feedbacks.deleteMany({})
+  // await ReverseGeocodingCache.deleteMany({})
 
   const facilityCount = await Facilities.count()
   const userCount = await Users.count()
@@ -189,8 +190,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.985046,
-          longitude: -51.1099435
+          type: 'Point',
+          coordinates: [-51.1099435, -29.985046]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -221,8 +222,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.984746,
-          longitude: -51.110243499999996
+          type: 'Point',
+          coordinates: [-51.110243499999996, -29.984746]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -258,8 +259,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.984446,
-          longitude: -51.1105435
+          type: 'Point',
+          coordinates: [-51.1105435, -29.984446]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -297,8 +298,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.984146,
-          longitude: -51.110843499999994
+          type: 'Point',
+          coordinates: [-51.110843499999994, -29.984146]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -341,8 +342,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.983846,
-          longitude: -51.1111435
+          type: 'Point',
+          coordinates: [-51.1111435, -29.983846]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -390,8 +391,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.983546,
-          longitude: -51.1114435
+          type: 'Point',
+          coordinates: [-51.1114435, -29.983546]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -441,8 +442,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.983246,
-          longitude: -51.111743499999996
+          type: 'Point',
+          coordinates: [-51.111743499999996, -29.983246]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -469,8 +470,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.982946,
-          longitude: -51.1120435
+          type: 'Point',
+          coordinates: [-51.1120435, -29.982946]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -502,8 +503,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.982646,
-          longitude: -51.112343499999994
+          type: 'Point',
+          coordinates: [-51.112343499999994, -29.982646]
         }
       },
       telephone: '+55 (51) 3000-0000',
@@ -537,8 +538,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks 
         state: 'RS',
         zip: '91100-000',
         coordinates: {
-          latitude: -29.982346,
-          longitude: -51.1126435
+          type: 'Point',
+          coordinates: [-51.1126435, -29.982346]
         }
       },
       telephone: '+55 (51) 3000-0000',
