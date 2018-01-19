@@ -52,7 +52,7 @@ export default ({ Users }) => ({
       roles
     }
 
-    const userCheck = Users.findOne({ email })
+    const userCheck = await Users.findOne({ email })
     if (userCheck) {
       throw Error('DUPLICATED_EMAIL')
     }
