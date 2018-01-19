@@ -7,7 +7,7 @@ export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
     const user = await userByEmail(email)
 
-    if (!user || !await compare(password, user.password)) {
+    if (!user || !user.password || !await compare(password, user.password)) {
       const avoidBruteForceTimer = () => {
         const timeout = Math.round(Math.random() * (6 - 2) + 2) * 1000
         return new Promise((resolve) => setTimeout(() => resolve(), timeout))
@@ -31,11 +31,27 @@ export const authenticate =
   }
 
 export const addUser =
-  async (obj, { user: { name, email, password, roles } }, { models: { Users: { addUser } }, services: { Auth } }) => {
+  async (obj, { user: { name, email, password, roles, coordinates } }, { models: { Users: { addUser } }, services: { Auth } }) => {
     Auth.authorizeFor('ADMIN')
 
     const hash = await hashPassword(password)
-    const user = await addUser({ name, email, password: hash, roles })
+    const user = await addUser({ name, email, password: hash, roles, coordinates })
+
+    if (!user) {
+      return {
+        success: false
+      }
+    }
+
+    return {
+      success: true,
+      user
+    }
+  }
+
+export const addWaitingUser =
+  async (obj, { user: { email, coordinates } }, { models: { Users: { addWaitingUser } }}) => {
+    const user = await addWaitingUser({ email, coordinates })
 
     if (!user) {
       return {

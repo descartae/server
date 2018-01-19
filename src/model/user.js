@@ -44,12 +44,16 @@ export default ({ Users }) => ({
     }
   },
   // Operations
-  async addUser ({ name, email, password, roles }) {
+  async addUser ({ name, email, password, roles, coordinates }) {
     const item = {
       name,
       email,
       password,
-      roles
+      roles,
+      coordinates: {
+        type: 'Point',
+        coordinates: [coordinates.longitude, coordinates.latitude]
+      }
     }
 
     const userCheck = await Users.findOne({ email })
@@ -59,6 +63,29 @@ export default ({ Users }) => ({
 
     if (!all((r) => any(['ADMIN', 'MAINTAINER', 'USER'])(r))(roles)) {
       throw Error('INVALID_ROLES')
+    }
+
+    const { ops: [user] } = await Users.insert(item)
+
+    return {
+      success: true,
+      user
+    }
+  },
+
+  async addWaitingUser ({ email, coordinates }) {
+    const item = {
+      email,
+      roles: ['USER'],
+      coordinates: {
+        type: 'Point',
+        coordinates: [coordinates.longitude, coordinates.latitude]
+      }
+    }
+
+    const userCheck = await Users.findOne({ email })
+    if (userCheck) {
+      throw Error('DUPLICATED_EMAIL')
     }
 
     const { ops: [user] } = await Users.insert(item)

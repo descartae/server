@@ -1,3 +1,4 @@
+import * as fields from './fields'
 import * as mutations from './mutations'
 import * as queries from './queries'
 
@@ -14,6 +15,7 @@ export const schema = `
     name: String!
     email: String!
     roles: [Role]!
+    coordinates: Coordinates
   }
 
   type AuthenticationResult {
@@ -49,6 +51,20 @@ export const schema = `
     INVALID_ROLES
   }
 
+  input AddWaitingUserData {
+    email: String!
+    coordinates: CoordinatesInput!
+  }
+
+  type AddWaitingUserResult {
+    success: Boolean!
+    error: AddWaitingUserFailureReason
+  }
+
+  enum AddWaitingUserFailureReason {
+    DUPLICATED_EMAIL
+  }
+
   input UserFilters {
     cursor: FilterCursors!
   }
@@ -67,9 +83,11 @@ export const queryExtension = `
 export const mutationExtension = `
   authenticate(credentials: AuthenticationData!): AuthenticationResult
   addUser(user: AddUserData!): AddUserResult
+  addWaitingUser(user: AddWaitingUserData!): AddWaitingUserResult
 `
 
 export const resolvers = {
+  User: fields,
   Query: queries,
   Mutation: mutations
 }
