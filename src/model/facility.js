@@ -92,6 +92,14 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       }
     }
 
+    data.location.coordinates = {
+      type: 'Point',
+      coordinates: [
+        data.location.coordinates.longitude,
+        data.location.coordinates.latitude
+      ]
+    }
+
     data = {
       ...data,
       openHours: data.openHours || [],
@@ -121,6 +129,14 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
           ...result,
           ...patch.location
         }
+      }
+
+      patch.location.coordinates = {
+        type: 'Point',
+        coordinates: [
+          patch.location.coordinates.longitude,
+          patch.location.coordinates.latitude
+        ]
       }
     }
 
