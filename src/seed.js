@@ -19,7 +19,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Alumínio',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: 'FFCF3B',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/aluminium/ios-medium.png',
@@ -33,7 +34,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Orgânico',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '8B6052',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/compost/ios-medium.png',
@@ -47,7 +49,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Óleo de Cozinha',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '8B6052',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/cookoil/ios-medium.png',
@@ -61,7 +64,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Lixo Eletrônico',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: 'B1BBC4',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/ewaste/ios-medium.png',
@@ -75,7 +79,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Móvel',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '505050',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/forniture/ios-medium.png',
@@ -89,7 +94,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Geral',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: 'AFB9C2',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
@@ -103,7 +109,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Vidro',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '5AC81A',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/glass/ios-medium.png',
@@ -117,7 +124,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Lixo Verde',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '5AC81A',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/green/ios-medium.png',
@@ -131,7 +139,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Resíduo Perigoso',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '842A9F',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/hazardous/ios-medium.png',
@@ -145,7 +154,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Papel',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: '59A7EE',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/paper/ios-medium.png',
@@ -159,7 +169,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       {
         _id: new ObjectId(),
         name: 'Plástico',
-        description: '',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
+        color: 'F94B68',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/plastic/ios-medium.png',

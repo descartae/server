@@ -12,6 +12,9 @@ export const schema = `
     # The user-readable type description
     description: String!
 
+    # The color for this type
+    color: String!
+
     # The icons for this type
     icons: IconSet!
   }
@@ -33,6 +36,9 @@ export const schema = `
 
     # The user-readable type description
     description: String!
+
+    # The color for this type
+    color: String!
 
     # The icons for this type
     icons: IconSetInput!
@@ -82,6 +88,9 @@ export const schema = `
 
     # The user-readable type description
     description: String
+
+    # The color for this type
+    color: String
 
     # The icons for this type
     icons: IconSetPatch!

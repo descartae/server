@@ -1,4 +1,4 @@
-import { assertNotEmpty } from './validation'
+import { assertNotEmpty, assertHexColor } from './validation'
 import DataLoader from 'dataloader'
 
 export default ({ TypesOfWaste }) => {
@@ -20,9 +20,10 @@ export default ({ TypesOfWaste }) => {
       return TypesOfWaste.find({ enabled: true }).toArray()
     },
     // Operations
-    async addTypeOfWaste ({ name, description, icons }) {
+    async addTypeOfWaste ({ name, description, color, icons }) {
       assertNotEmpty(name, 'name')
       assertNotEmpty(description, 'description')
+      assertHexColor(color, 'color')
 
       assertNotEmpty(icons.iosSmallURL, 'icons.iosSmallURL')
       assertNotEmpty(icons.iosMediumURL, 'icons.iosMediumURL')
@@ -35,6 +36,7 @@ export default ({ TypesOfWaste }) => {
       const item = {
         name,
         description,
+        color: color.replace('#', '').toUpperCase(),
         icons,
         enabled: true
       }
@@ -46,7 +48,7 @@ export default ({ TypesOfWaste }) => {
         typeOfWaste: result
       }
     },
-    async updateTypeOfWaste ({ _id, patch: { name, description, icons } }) {
+    async updateTypeOfWaste ({ _id, patch: { name, description, color, icons } }) {
       const update = {}
 
       if (name != null) {
@@ -55,6 +57,11 @@ export default ({ TypesOfWaste }) => {
 
       if (description != null) {
         update.description = description
+      }
+
+      if (color != null) {
+        assertHexColor(color, 'color')
+        update.color = color.replace('#', '').toUpperCase()
       }
 
       if (icons != null) {
