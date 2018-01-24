@@ -41,7 +41,7 @@ export const schema = `
     zip: String
 
     # Exact coordinates to the location
-    coordinates: Coordinates
+    coordinates: Coordinates!
   }
 
   # A latitude + longitude pair
