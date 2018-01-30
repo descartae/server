@@ -14,7 +14,10 @@ export const shutdown = () => {
 
 export const connect = async (mongoUrl) => {
   if (db == null) {
-    db = await MongoClient.connect(mongoUrl)
+    db = await MongoClient.connect(mongoUrl, {
+      reconnectTries: Number.MAX_VALUE,
+      reconnectInterval: 5000,
+    })
   }
 
   return {
