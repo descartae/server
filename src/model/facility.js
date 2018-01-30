@@ -32,14 +32,6 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
     let aggregation
     if (location != null && location.near != null) {
       const { latitude, longitude } = location.near
-      const bounds = await Geolocation.boundaries({ latitude, longitude })
-
-      if (bounds) {
-        query['location.coordinates'] = {
-          $geoWithin: { $polygon: bounds }
-        }
-      }
-
       aggregation = [
         {
           $geoNear : {
@@ -47,7 +39,7 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
             near: [ longitude, latitude ],
             distanceField: 'distance',
             spherical: true,
-            maxDistance: bounds ? 200000 : 20000
+            maxDistance: 20000
           }
         },
         { $sort: { distance: 1 } },
