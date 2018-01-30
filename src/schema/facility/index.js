@@ -50,15 +50,17 @@ export const schema = `
     longitude: Float!
   }
 
+  scalar Time
+
   # Represents a timespan in a day of the week
   type OpenTime {
     dayOfWeek: DayOfWeek!
 
     # The hour representing the start of the timespan
-    startTime: Int!
+    startTime: Time!
 
     # The hour representing the end of the timespan
-    endTime: Int!
+    endTime: Time!
   }
 
   enum DayOfWeek {
@@ -121,10 +123,10 @@ export const schema = `
     dayOfWeek: DayOfWeek!
 
     # The hour representing the start of the timespan
-    startTime: Int!
+    startTime: Time!
 
     # The hour representing the end of the timespan
-    endTime: Int!
+    endTime: Time!
   }
 
   # The add facility operation result
@@ -234,7 +236,38 @@ export const mutationExtension = `
   disableFacility(input: DisableFacilityInput!): DisableFacilityPayload!
 `
 
+const pad = (n, size) => {
+  let s = n.toString(10)
+  while (s.length < (size || 2 )) { s = '0' + s }
+  return s
+}
+
 export const resolvers = {
+  Time: {
+    __parseValue (value) {
+      const [hours, minutes] = value.split(':').map((n) => parseInt(n, 10))
+      if (!hours || hours < 0 || hours >= 24) {
+        return null
+      }
+      if (!minutes || minutes < 0 || minutes >= 60) {
+        return null
+      }
+      const total = hours + (minutes / 60)
+      return total
+    },
+    __serialize (value) {
+      const hours = Math.trunc(value)
+      const minutes = (value - hours) * 60
+      return `${pad(hours)}:${pad(minutes)}`
+    },
+    __parseLiteral (ast) {
+      if (ast.kind === Kind.STRING) {
+        return this.__parseValue(ast.value)
+      }
+
+      return null
+    }
+  },
   Facility: fields,
   Query: queries,
   Mutation: mutations
