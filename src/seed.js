@@ -95,7 +95,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
         _id: new ObjectId(),
         name: 'Geral',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
-        color: 'AFB9C2',
+        color: 'BEBEC6',
         icons: {
           iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
           iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
