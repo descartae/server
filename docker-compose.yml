@@ -25,6 +25,7 @@ services:
       - SERVER_PORT=4000
       - JWT_SECRET=descartae
       - MONGODB_URL=mongodb://mongodb:27017/webportal
+      - MAPS_API_KEY=myapikey
     depends_on:
       - mongodb
     networks:
