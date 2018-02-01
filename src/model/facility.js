@@ -36,7 +36,10 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
         {
           $geoNear : {
             query,
-            near: [ longitude, latitude ],
+            near: {
+              type: 'Point',
+              coordinates: [ longitude, latitude ]
+            },
             distanceField: 'distance',
             spherical: true,
             maxDistance: 20000
