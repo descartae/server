@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "descartae-server",
   "version": "0.1.0",
   "description": "The Descartaê data management service",
   "private": true,
