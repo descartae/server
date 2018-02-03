@@ -2,5 +2,5 @@
 
 docker-compose down
 docker rm -f server.webportal.descartae
-docker rmi -f descartae/webportal-client
-docker build --no-cache -t descartae/webportal-client .
+docker rmi -f descartae/webportal-server
+docker build --no-cache -t descartae/webportal-server .
