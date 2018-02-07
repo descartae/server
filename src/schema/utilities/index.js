@@ -18,7 +18,7 @@ export const schema = `
     # Must be a value between 1 and 100
     quantity: Int!
   }
-  
+
   # A pair of cursors allowing navigation from this page
   type PageCursors {
     # The cursor used to get items from before this page

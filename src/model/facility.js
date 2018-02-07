@@ -11,22 +11,17 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       enabled: true
     }
 
-    if (cursor.quantity < 0) {
-      cursor.quantity = 1
-    }
-
-    if (cursor.quantity > 100) {
-      cursor.quantity = 100
-    }
-
-    if (cursor.after != null) {
-      query._id = { $gt: ObjectId(cursor.after) }
-    } else if (cursor.before) {
-      query._id = { $lt: ObjectId(cursor.before) }
-    }
-
     if (hasTypesOfWaste != null && hasTypesOfWaste.length > 0) {
       query.typesOfWaste = { $in: hasTypesOfWaste }
+    }
+
+    const pagination = {}
+    let reversed = false
+    if (cursor.after) {
+      pagination._id = { $gt: ObjectId(cursor.after) }
+    } else if (cursor.before) {
+      reversed = true
+      pagination._id = { $lt: ObjectId(cursor.before) }
     }
 
     let aggregation
@@ -35,7 +30,7 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       aggregation = [
         {
           $geoNear : {
-            query,
+            query: { ...query, ...pagination },
             near: {
               type: 'Point',
               coordinates: [ longitude, latitude ]
@@ -45,19 +40,23 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
             maxDistance: 20000
           }
         },
-        { $sort: { distance: 1 } },
-        { $limit: cursor.quantity }
+        { $sort: { distance: reversed ? -1 : 1 } },
       ]
     } else {
       aggregation = [
-        { $match: query },
-        { $limit: cursor.quantity }
+        { $match: { ...query, ...pagination } },
+        { $sort: { _id: reversed ? -1 : 1 } },
       ]
     }
 
+    const quantity = Math.max(Math.min(cursor.quantity, 100), 1)
+
     const items =
       await Facilities
-        .aggregate(aggregation)
+        .aggregate([
+          ...aggregation,
+          { $limit: quantity }
+        ])
         .toArray()
 
     const cursors = {
@@ -65,9 +64,16 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       after: items.length > 0 ? items[items.length - 1]._id.toString() : null
     }
 
+    if (items.length) {
+      const first = reversed ? items[items.length - 1] : items[0]
+      const last = reversed ? items[0] : items[items.length - 1]
+      cursors.before = first._id.toString()
+      cursors.after = last._id.toString()
+    }
+
     return {
       cursors,
-      items
+      items: reversed ? items.reverse() : items
     }
   },
   // Operations
