@@ -192,7 +192,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
     }
 
     const facilities = [{
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000001'),
       createdBy: user._id,
       name: 'Local Exemplo 1',
       location: {
@@ -224,7 +224,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000002'),
       createdBy: user._id,
       name: 'Local Exemplo 2',
       location: {
@@ -261,7 +261,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000003'),
       createdBy: user._id,
       name: 'Local Exemplo 3',
       location: {
@@ -300,7 +300,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000004'),
       createdBy: user._id,
       name: 'Local Exemplo 4',
       location: {
@@ -344,7 +344,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000005'),
       createdBy: user._id,
       name: 'Local Exemplo 5',
       location: {
@@ -393,7 +393,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000006'),
       createdBy: user._id,
       name: 'Local Exemplo 6',
       location: {
@@ -444,7 +444,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000007'),
       createdBy: user._id,
       name: 'Local Exemplo 7',
       location: {
@@ -472,7 +472,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000008'),
       createdBy: user._id,
       name: 'Local Exemplo 8',
       location: {
@@ -505,7 +505,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000009'),
       createdBy: user._id,
       name: 'Local Exemplo 9',
       location: {
@@ -540,7 +540,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       enabled: true
     },
     {
-      _id: new ObjectId(),
+      _id: new ObjectId('000000000000000000000010'),
       createdBy: user._id,
       name: 'Local Exemplo 10',
       location: {
