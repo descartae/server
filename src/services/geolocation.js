@@ -22,23 +22,32 @@ export default ({ models: { ReverseGeocodingCache }, configuration: { secrets: {
             return
           }
 
-          const { address_components, geometry } = data
+          try {
+            const { address_components, geometry } = data
+  
+            const findByType = (target) =>
+              (
+                address_components.filter(it => it.types.includes(target))[0] ||
+                { long_name: '' }
+              )
+              .long_name
 
-          const findByType = (target) =>
-            address_components.filter(it => it.types.includes(target))[0].long_name
-
-          const location = {
-            address: findByType('route') + ' ' + findByType('street_number'),
-            municipality: findByType('administrative_area_level_2'),
-            state: findByType('administrative_area_level_1'),
-            zip: findByType('postal_code') + '000',
-            coordinates: {
-              latitude: geometry.location.lat,
-              longitude: geometry.location.lng
+            const location = {
+              address: findByType('route') + ' ' + findByType('street_number'),
+              municipality: findByType('administrative_area_level_2'),
+              state: findByType('administrative_area_level_1'),
+              zip: findByType('postal_code') + '000',
+              coordinates: {
+                latitude: geometry.location.lat,
+                longitude: geometry.location.lng
+              }
             }
-          }
 
-          resolve(location)
+            resolve(location)
+          } catch (error) {
+            console.log(error)
+            reject(error)
+          }
         })
       })
     },
