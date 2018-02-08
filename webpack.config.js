@@ -3,7 +3,6 @@ const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
 const DotEnvPlugin = require('dotenv-webpack')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const StartServerPlugin = require('start-server-webpack-plugin')
 
 const {
@@ -38,7 +37,6 @@ module.exports = [
     },
     plugins: [
       new DotEnvPlugin({ safe: true, systemvars: true }),
-      new UglifyJSPlugin(),
       new BannerPlugin({
         banner: 'require("source-map-support").install();',
         raw: true,
