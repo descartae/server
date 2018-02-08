@@ -590,7 +590,10 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
         _id: new ObjectId(),
         resolved: false,
         facility: facilities[0]._id,
-        contents: 'Feedback Exemplo 2 1'
+        contents: `Bom dia,
+Creio que esse seja um exemplo de feedback com multiplas linhas.
+
+Por favor, verificar na interface!`
       },
       {
         _id: new ObjectId(),
