@@ -6,36 +6,45 @@ export default ({ Feedbacks }) => ({
   async feedback (_id) {
     return Feedbacks.findOne({ _id })
   },
-  async feedbacks ({ cursor, resolved }) {
+  async feedbacks ({ cursor, resolved, facility }) {
     const query = {}
-
-    if (cursor.quantity < 0) {
-      cursor.quantity = 1
-    }
-
-    if (cursor.quantity > 100) {
-      cursor.quantity = 100
-    }
-
-    if (cursor.after != null) {
-      query._id = { $gt: ObjectId(cursor.after) }
-    } else if (cursor.before) {
-      query._id = { $lt: ObjectId(cursor.before) }
-    }
 
     if (resolved != null) {
       query.resolved = resolved
     }
 
+    if (facility != null) {
+      query.facility = facility
+    }
+
+    const pagination = {}
+    let reversed = false
+    if (cursor.after) {
+      pagination._id = { $lt: ObjectId(cursor.after) }
+    } else if (cursor.before) {
+      reversed = true
+      pagination._id = { $gt: ObjectId(cursor.before) }
+    }
+
+    const quantity = Math.max(Math.min(cursor.quantity, 100), 1)
+
     const items =
       await Feedbacks
-        .find(query)
-        .limit(cursor.quantity)
+        .find({ ...query, ...pagination })
+        .sort({ _id: reversed ? 1 : -1 })
+        .limit(quantity)
         .toArray()
 
     const cursors = {
-      before: items.length > 0 ? items[0]._id.toString() : null,
-      after: items.length > 0 ? items[items.length - 1]._id.toString() : null
+      before: cursor.before,
+      after: cursor.after
+    }
+
+    if (items.length) {
+      const first = reversed ? items[items.length - 1] : items[0]
+      const last = reversed ? items[0] : items[items.length - 1]
+      cursors.before = first._id.toString()
+      cursors.after = last._id.toString()
     }
 
     return {

@@ -55,6 +55,9 @@ export const schema = `
 
     # Indicates the required state for the resolved flag
     resolved: Boolean
+
+    # Filter by facility
+    facility: ID
   }
 
   type FeedbackPage {
