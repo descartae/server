@@ -24,6 +24,19 @@ export const schema = `
 
     # The facility's operating hours
     openHours: [OpenTime]!
+
+    # Feedback counting
+    feedbacks: FeedbackCount
+  }
+
+  # Feedbacks count
+  type FeedbackCount {
+
+    # Total feedbacks for the facility
+    total: Int!
+
+    # Total unresolved feedbacks for the facility
+    unresolved: Int!
   }
 
   # Location data for a point of interest

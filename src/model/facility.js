@@ -1,12 +1,12 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
 
-export default ({ Facilities, ReverseGeocodingCache }) => ({
+export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
   // Root queries
   async facility (_id) {
     return Facilities.findOne({ _id })
   },
-  async facilities ({ cursor, location, hasTypesOfWaste }, { Geolocation }) {
+  async facilities ({ cursor, location, hasTypesOfWaste, feedbacks }, { Geolocation }) {
     const query = {
       enabled: true
     }
@@ -69,6 +69,50 @@ export default ({ Facilities, ReverseGeocodingCache }) => ({
       const last = reversed ? items[0] : items[items.length - 1]
       cursors.before = first._id.toString()
       cursors.after = last._id.toString()
+
+      if (feedbacks.total || feedbacks.unresolved) {
+
+        // Filter only unresolved if filter is nos asking for total
+        let resolvedQuery = {}
+        if (!feedbacks.total) {
+          resolvedQuery = { resolved: false }
+        }
+
+        const countQuery = {}
+        if (feedbacks.total) {
+          countQuery.total = { $sum: 1 }
+        }
+        if (feedbacks.unresolved) {
+          countQuery.unresolved = { $sum: { $cond: { if: '$resolved', then: 0, else: 1 } } }
+        }
+
+        const ids = items.map(i => i._id)
+        const aggregation =
+          await Feedbacks
+            .aggregate([
+              { $match: { facility: { $in: ids }, ...resolvedQuery } },
+              { $group: { _id: '$facility', ...countQuery } }
+            ])
+            .toArray()
+
+        const defaultobject = {}
+        if (feedbacks.total) {
+          defaultobject.total = 0
+        }
+        if (feedbacks.unresolved) {
+          defaultobject.unresolved = 0
+        }
+
+        for (const item of items) {
+          item.feedbacks = { ...defaultobject }
+        }
+
+        for (const counts of aggregation) {
+          const item = items.find(i => i._id.equals(counts._id))
+          delete counts._id
+          item.feedbacks = { ...item.feedbacks, ...counts }
+        }
+      }
     }
 
     return {
