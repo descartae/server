@@ -38,12 +38,13 @@ export const schema = `
     email: String!
     password: String!
     roles: [Role]!
+    coordinates: CoordinatesInput
   }
 
   type AddUserResult {
     success: Boolean!
     error: AddUserFailureReason
-    sessionToken: String
+    user: User
   }
 
   enum AddUserFailureReason {
@@ -65,7 +66,26 @@ export const schema = `
     DUPLICATED_EMAIL
   }
 
+  input UpdateUserInput {
+    _id: ID!
+    patch: UserPatch!
+  }
+
+  input UserPatch {
+    name: String
+    email: String
+    password: String
+    roles: [Role]
+    coordinates: CoordinatesInput
+  }
+
+  type UpdateUserPayload {
+    success: Boolean!
+    user: User
+  }
+
   input UserFilters {
+    hasRole: Boolean
     cursor: FilterCursors!
   }
 
@@ -78,12 +98,14 @@ export const schema = `
 export const queryExtension = `
   whoami: String
   users(filters: UserFilters!): UsersPage
+  user(_id: ID!): User
 `
 
 export const mutationExtension = `
-  authenticate(credentials: AuthenticationData!): AuthenticationResult
-  addUser(user: AddUserData!): AddUserResult
-  addWaitingUser(user: AddWaitingUserData!): AddWaitingUserResult
+  authenticate(credentials: AuthenticationData!): AuthenticationResult!
+  addUser(input: AddUserData!): AddUserResult!
+  addWaitingUser(user: AddWaitingUserData!): AddWaitingUserResult!
+  updateUser(input: UpdateUserInput!): UpdateUserPayload!
 `
 
 export const resolvers = {

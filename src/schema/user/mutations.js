@@ -1,13 +1,12 @@
-import { compare, genSalt, hash } from 'bcryptjs'
 
-const hashPassword = async (password) =>
-  hash(password, await genSalt(12))
 
 export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
     const user = await userByEmail(email)
 
-    if (!user || !user.password || !await compare(password, user.password)) {
+    console.log(user.password, password)
+
+    if (!user || !user.password || !await Auth.compare(user.password, password)) {
       const avoidBruteForceTimer = () => {
         const timeout = Math.round(Math.random() * (6 - 2) + 2) * 1000
         return new Promise((resolve) => setTimeout(() => resolve(), timeout))
@@ -31,11 +30,28 @@ export const authenticate =
   }
 
 export const addUser =
-  async (obj, { user: { name, email, password, roles, coordinates } }, { models: { Users: { addUser } }, services: { Auth } }) => {
+  async (obj, { input: { name, email, password, roles, coordinates } }, { models: { Users: { addUser } }, services: { Auth } }) => {
     Auth.authorizeFor('ADMIN')
 
-    const hash = await hashPassword(password)
-    const user = await addUser({ name, email, password: hash, roles, coordinates })
+    const user = await addUser({ name, email, password, roles, coordinates }, { Auth })
+
+    if (!user) {
+      return {
+        success: false
+      }
+    }
+
+    return {
+      success: true,
+      user
+    }
+  }
+
+export const updateUser =
+  async (obj, { input }, { services, services: { Auth }, models: { Users: { updateUser } } }, info) => {
+    Auth.authorizeFor('ADMIN')
+
+    const user = await updateUser(input, { Auth })
 
     if (!user) {
       return {
