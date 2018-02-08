@@ -590,7 +590,31 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
         _id: new ObjectId(),
         resolved: false,
         facility: facilities[0]._id,
-        contents: 'Feedback Exemplo 2'
+        contents: 'Feedback Exemplo 2 1'
+      },
+      {
+        _id: new ObjectId(),
+        resolved: false,
+        facility: facilities[0]._id,
+        contents: 'Feedback Exemplo 2 2'
+      },
+      {
+        _id: new ObjectId(),
+        resolved: false,
+        facility: facilities[0]._id,
+        contents: 'Feedback Exemplo 2 3'
+      },
+      {
+        _id: new ObjectId(),
+        resolved: true,
+        facility: facilities[0]._id,
+        contents: 'Feedback Exemplo 2 4'
+      },
+      {
+        _id: new ObjectId(),
+        resolved: true,
+        facility: facilities[0]._id,
+        contents: 'Feedback Exemplo 2 5'
       },
       {
         _id: new ObjectId(),
