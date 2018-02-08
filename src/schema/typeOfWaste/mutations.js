@@ -1,5 +1,4 @@
 
-
 export const addTypeOfWaste =
   async (_, { input }, { services: { Auth }, models: { TypesOfWaste: { addTypeOfWaste } } }) =>
   Auth.authorizeFor('ADMIN') || addTypeOfWaste(input)

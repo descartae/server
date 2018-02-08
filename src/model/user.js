@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
-import { any, all } from 'ramda'
 
 export default ({ Users }) => ({
   // Root queries
@@ -37,7 +36,7 @@ export default ({ Users }) => ({
 
     const cursors = {
       before: cursor.before,
-      after: cursor.after,
+      after: cursor.after
     }
 
     if (items.length) {
@@ -104,7 +103,7 @@ export default ({ Users }) => ({
 
     const { value } =
       await Users.findOneAndUpdate({
-        _id,
+        _id
       }, {
         $set: patch
       }, {

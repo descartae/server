@@ -1,10 +1,7 @@
 
-
 export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
     const user = await userByEmail(email)
-
-    console.log(user.password, password)
 
     if (!user || !user.password || !await Auth.compare(user.password, password)) {
       const avoidBruteForceTimer = () => {
@@ -66,7 +63,7 @@ export const updateUser =
   }
 
 export const addWaitingUser =
-  async (obj, { user: { email, coordinates } }, { models: { Users: { addWaitingUser } }}) => {
+  async (obj, { user: { email, coordinates } }, { models: { Users: { addWaitingUser } } }) => {
     const user = await addWaitingUser({ email, coordinates })
 
     if (!user) {

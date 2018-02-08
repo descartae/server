@@ -1,6 +1,6 @@
 export const coordinates = async ({ coordinates }, args, ctx, info) => {
   if (!coordinates) {
-      return
+    return
   }
   const [ longitude, latitude ] = coordinates.coordinates
   return { latitude, longitude }

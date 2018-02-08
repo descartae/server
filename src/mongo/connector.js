@@ -16,7 +16,7 @@ export const connect = async (mongoUrl) => {
   if (db == null) {
     db = await MongoClient.connect(mongoUrl, {
       reconnectTries: Number.MAX_VALUE,
-      reconnectInterval: 5000,
+      reconnectInterval: 5000
     })
   }
 

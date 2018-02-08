@@ -1,3 +1,5 @@
+import { Kind } from 'graphql'
+
 import * as fields from './fields'
 import * as mutations from './mutations'
 import * as queries from './queries'
@@ -251,7 +253,7 @@ export const mutationExtension = `
 
 const pad = (n, size) => {
   let s = n.toString(10)
-  while (s.length < (size || 2 )) { s = '0' + s }
+  while (s.length < (size || 2)) { s = '0' + s }
   return s
 }
 

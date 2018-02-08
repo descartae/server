@@ -5,7 +5,7 @@ export default ({ ReverseGeocodingCache }) => ({
       boundaries: {
         $geoIntersects: {
           $geometry: {
-            type: "Point",
+            type: 'Point',
             coordinates: [ longitude, latitude ]
           }
         }
@@ -17,9 +17,9 @@ export default ({ ReverseGeocodingCache }) => ({
     return ReverseGeocodingCache.insert({
       location,
       boundaries: {
-        type: "Polygon",
+        type: 'Polygon',
         coordinates: [ bounds ]
       }
     })
-  },
+  }
 })

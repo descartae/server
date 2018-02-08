@@ -7,5 +7,5 @@ export const updateFacility =
     Auth.authorizeFor('ADMIN', 'MAINTAINER') || updateFacility(input, services)
 
 export const disableFacility =
-  (obj, { input }, { services: { Auth },models: { Facilities: { disableFacility } } }, info) =>
+  (obj, { input }, { services: { Auth }, models: { Facilities: { disableFacility } } }, info) =>
     Auth.authorizeFor('ADMIN', 'MAINTAINER') || disableFacility(input)

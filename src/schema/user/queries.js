@@ -9,5 +9,5 @@ export const users =
     Auth.authorizeFor('ADMIN') || users(filters)
 
 export const user =
-  (obj, { _id }, { models: { Users: { user } } }, info) =>
+  (obj, { _id }, { models: { Users: { user } }, services: { Auth } }, info) =>
     Auth.authorizeFor('ADMIN') || user(_id)

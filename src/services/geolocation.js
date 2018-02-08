@@ -24,7 +24,7 @@ export default ({ models: { ReverseGeocodingCache }, configuration: { secrets: {
 
           try {
             const { address_components, geometry } = data
-  
+
             const findByType = (target) =>
               (
                 address_components.filter(it => it.types.includes(target))[0] ||
@@ -75,19 +75,19 @@ export default ({ models: { ReverseGeocodingCache }, configuration: { secrets: {
 
         const cityBoundaries = find(
           (r) =>
-            find(t => t == 'locality')(r.types) &&
-            find(t => t == 'political')(r.types)
+            find(t => t === 'locality')(r.types) &&
+            find(t => t === 'political')(r.types)
         )(city.results)
 
         if (cityBoundaries) {
           const { northeast, southwest } = cityBoundaries.geometry.viewport
 
           const bounds = [
-            [southwest.lng , northeast.lat],
-            [northeast.lng , northeast.lat],
-            [northeast.lng , southwest.lat],
-            [southwest.lng , southwest.lat],
-            [southwest.lng , northeast.lat]
+            [southwest.lng, northeast.lat],
+            [northeast.lng, northeast.lat],
+            [northeast.lng, southwest.lat],
+            [southwest.lng, southwest.lat],
+            [southwest.lng, northeast.lat]
           ]
 
           await ReverseGeocodingCache.addToCache({
@@ -98,7 +98,6 @@ export default ({ models: { ReverseGeocodingCache }, configuration: { secrets: {
           return bounds
         }
       }
-
     }
   }
 }

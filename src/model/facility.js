@@ -29,7 +29,7 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
       const { latitude, longitude } = location.near
       aggregation = [
         {
-          $geoNear : {
+          $geoNear: {
             query: { ...query, ...pagination },
             near: {
               type: 'Point',
@@ -40,12 +40,12 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
             maxDistance: 20000
           }
         },
-        { $sort: { distance: reversed ? -1 : 1 } },
+        { $sort: { distance: reversed ? -1 : 1 } }
       ]
     } else {
       aggregation = [
         { $match: { ...query, ...pagination } },
-        { $sort: { _id: reversed ? -1 : 1 } },
+        { $sort: { _id: reversed ? -1 : 1 } }
       ]
     }
 
@@ -60,8 +60,8 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
         .toArray()
 
     const cursors = {
-      before: items.length > 0 ? items[0]._id.toString() : null,
-      after: items.length > 0 ? items[items.length - 1]._id.toString() : null
+      before: cursor.before,
+      after: cursor.after
     }
 
     if (items.length) {
@@ -71,7 +71,6 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
       cursors.after = last._id.toString()
 
       if (feedbacks.total || feedbacks.unresolved) {
-
         // Filter only unresolved if filter is nos asking for total
         let resolvedQuery = {}
         if (!feedbacks.total) {
@@ -95,6 +94,7 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
             ])
             .toArray()
 
+        // Caution: mutability ahead
         const defaultobject = {}
         if (feedbacks.total) {
           defaultobject.total = 0
