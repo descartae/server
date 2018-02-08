@@ -28,8 +28,6 @@ export default ({ Users }) => ({
 
     const quantity = Math.max(Math.min(cursor.quantity, 100), 1)
 
-    console.log({ ...query, ...pagination })
-
     const items =
       await Users
         .find({ ...query, ...pagination })
