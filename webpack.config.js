@@ -22,6 +22,10 @@ module.exports = [
       path: path.join(__dirname, 'build'),
       filename: 'index.js'
     },
+    node: {
+      __filename: true,
+      __dirname: true
+    },
     target: 'node',
     devtool: 'source-map',
     externals: [
@@ -48,14 +52,6 @@ module.exports = [
       ])
     ]
   },
-  // {
-  //   entry: './src/resources/graphiql.html',
-  //   name: 'graphiql',
-  //   output: {
-  //     path: path.join(__dirname, 'build'),
-  //     filename: 'graphiql.html'
-  //   }
-  // },
   // Watch for changes and hot reload
   {
     entry: [
