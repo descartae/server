@@ -243,7 +243,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       typesOfWaste: [
         typesOfWaste[1]._id,
         typesOfWaste[2]._id,
-        typesOfWaste[3]._id,
+        typesOfWaste[3]._id
       ],
       openHours: [
         {
@@ -318,7 +318,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id,
+        typesOfWaste[2]._id
       ],
       openHours: [
         {
@@ -363,7 +363,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       typesOfWaste: [
         typesOfWaste[1]._id,
         typesOfWaste[2]._id,
-        typesOfWaste[3]._id,
+        typesOfWaste[3]._id
       ],
       openHours: [
         {
@@ -462,7 +462,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id,
+        typesOfWaste[2]._id
       ],
       openHours: [
         {
@@ -491,7 +491,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       typesOfWaste: [
         typesOfWaste[1]._id,
         typesOfWaste[2]._id,
-        typesOfWaste[3]._id,
+        typesOfWaste[3]._id
       ],
       openHours: [
         {
@@ -558,7 +558,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id,
+        typesOfWaste[2]._id
       ],
       openHours: [
         {

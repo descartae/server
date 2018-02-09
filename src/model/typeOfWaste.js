@@ -36,7 +36,7 @@ export default ({ TypesOfWaste }) => {
         ...type,
         icons: {
           ...general.icons,
-          ...type.icons,
+          ...type.icons
         }
       }))
     },
