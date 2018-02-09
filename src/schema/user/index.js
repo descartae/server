@@ -104,7 +104,7 @@ export const queryExtension = `
 export const mutationExtension = `
   authenticate(credentials: AuthenticationData!): AuthenticationResult!
   addUser(input: AddUserData!): AddUserResult!
-  addWaitingUser(user: AddWaitingUserData!): AddWaitingUserResult!
+  addWaitingUser(input: AddWaitingUserData!): AddWaitingUserResult!
   updateUser(input: UpdateUserInput!): UpdateUserPayload!
 `
 
