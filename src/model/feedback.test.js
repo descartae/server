@@ -58,7 +58,7 @@ describe('feedback operations', () => {
 
       const args = {
         contents: 'Example',
-        center: 'center_id'
+        facility: 'facility_id'
       }
 
       const context = {
@@ -79,7 +79,7 @@ describe('feedback operations', () => {
       expect(spy.called).toEqual(true)
       expect(spy.result.resolved).toEqual(false)
       expect(spy.result.contents).toEqual('Example')
-      expect(spy.result.center).toEqual('center_id')
+      expect(spy.result.facility).toEqual('facility_id')
     })
 
     it('fails if a required field is missing', async () => {
@@ -89,7 +89,7 @@ describe('feedback operations', () => {
       }
 
       const args = {
-        center: 'center_id'
+        facility: 'facility_id'
       }
 
       const context = {

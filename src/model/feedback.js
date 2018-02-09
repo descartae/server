@@ -53,12 +53,12 @@ export default ({ Feedbacks }) => ({
     }
   },
   // Operations
-  async addFeedback ({ contents, center }) {
+  async addFeedback ({ contents, facility }) {
     assertNotEmpty(contents, 'contents')
 
     const item = {
       contents,
-      center,
+      facility,
       resolved: false
     }
 
