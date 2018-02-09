@@ -1,9 +1,17 @@
 import { assertNotEmpty, assertHexColor } from './validation'
 import DataLoader from 'dataloader'
+import { ObjectId } from 'mongodb'
 
 export default ({ TypesOfWaste }) => {
   const batcher =
-    async (ids) => TypesOfWaste.find({ _id: { $in: ids } }).toArray()
+    async (ids) =>
+      TypesOfWaste
+      .find({
+        _id: {
+          $in: ids.map(id => id instanceof ObjectId ? id : ObjectId(id))
+        }
+      })
+      .toArray()
 
   const options = {
     cacheKeyFn: (key) => key.toString()
@@ -17,7 +25,20 @@ export default ({ TypesOfWaste }) => {
       return dataloader.load(_id)
     },
     async typesOfWaste () {
-      return TypesOfWaste.find({ enabled: true }).toArray()
+      const general = await dataloader.load('000000000000000000000000')
+
+      const types =
+        await TypesOfWaste
+          .find({ name: { $ne: null }, enabled: true })
+          .toArray()
+
+      return types.map((type) => ({
+        ...type,
+        icons: {
+          ...general.icons,
+          ...type.icons,
+        }
+      }))
     },
     // Operations
     async addTypeOfWaste ({ name, description, color, icons }) {

@@ -16,6 +16,23 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
     console.log('No data found - seeding database')
 
     const typesOfWaste = [
+
+      // Default type
+      {
+        _id: new ObjectId('000000000000000000000000'),
+        name: '',
+        color: 'BEBEC6',
+        icons: {
+          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
+          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
+          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-large.png',
+          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-small.png',
+          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-medium.png',
+          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-large.png'
+        },
+        enabled: false
+      },
+
       {
         _id: new ObjectId(),
         name: 'Alumínio',
@@ -88,21 +105,6 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
           androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/furniture/android-small.png',
           androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/furniture/android-medium.png',
           androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/furniture/android-large.png'
-        },
-        enabled: true
-      },
-      {
-        _id: new ObjectId(),
-        name: 'Geral',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod',
-        color: 'BEBEC6',
-        icons: {
-          iosSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-small.png',
-          iosMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-medium.png',
-          iosLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/ios-large.png',
-          androidSmallURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-small.png',
-          androidMediumURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-medium.png',
-          androidLargeURL: 'http://descartae.com.s3-website-us-east-1.amazonaws.com/assets/typesOfWaste/general/android-large.png'
         },
         enabled: true
       },
@@ -207,8 +209,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
-        typesOfWaste[1]._id
+        typesOfWaste[1]._id,
+        typesOfWaste[2]._id
       ],
       openHours: [
         {
@@ -239,9 +241,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id
+        typesOfWaste[2]._id,
+        typesOfWaste[3]._id,
       ],
       openHours: [
         {
@@ -276,7 +278,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id
+        typesOfWaste[1]._id
       ],
       openHours: [
         {
@@ -315,8 +317,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
-        typesOfWaste[1]._id
+        typesOfWaste[1]._id,
+        typesOfWaste[2]._id,
       ],
       openHours: [
         {
@@ -359,9 +361,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id
+        typesOfWaste[2]._id,
+        typesOfWaste[3]._id,
       ],
       openHours: [
         {
@@ -408,7 +410,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id
+        typesOfWaste[1]._id
       ],
       openHours: [
         {
@@ -459,8 +461,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
-        typesOfWaste[1]._id
+        typesOfWaste[1]._id,
+        typesOfWaste[2]._id,
       ],
       openHours: [
         {
@@ -487,9 +489,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
         typesOfWaste[1]._id,
-        typesOfWaste[2]._id
+        typesOfWaste[2]._id,
+        typesOfWaste[3]._id,
       ],
       openHours: [
         {
@@ -520,7 +522,7 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id
+        typesOfWaste[1]._id
       ],
       openHours: [
         {
@@ -555,8 +557,8 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       },
       telephone: '+55 (51) 3000-0000',
       typesOfWaste: [
-        typesOfWaste[0]._id,
-        typesOfWaste[1]._id
+        typesOfWaste[1]._id,
+        typesOfWaste[2]._id,
       ],
       openHours: [
         {
