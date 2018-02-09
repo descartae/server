@@ -261,10 +261,11 @@ export const resolvers = {
   Time: {
     __parseValue (value) {
       const [hours, minutes] = value.split(':').map((n) => parseInt(n, 10))
-      if (!hours || hours < 0 || hours >= 24) {
+
+      if ((!hours && hours !== 0) || hours < 0 || hours >= 24) {
         return null
       }
-      if (!minutes || minutes < 0 || minutes >= 60) {
+      if ((!minutes && minutes !== 0) || minutes < 0 || minutes >= 60) {
         return null
       }
       const total = hours + (minutes / 60)
@@ -272,7 +273,7 @@ export const resolvers = {
     },
     __serialize (value) {
       const hours = Math.trunc(value)
-      const minutes = (value - hours) * 60
+      const minutes = Math.trunc((value - hours) * 60)
       return `${pad(hours)}:${pad(minutes)}`
     },
     __parseLiteral (ast) {
