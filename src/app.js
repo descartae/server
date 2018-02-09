@@ -37,9 +37,7 @@ export const createApp = async (mongodbUrl, secrets) => {
       }
     })
 
-  server.use('/graphiql', graphiqlExpress({
-    endpointURL: '/graphql'
-  }))
+  server.use('/graphiql', express.static(__dirname + '/resources/graphiql.html'))
 
   server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress(async (request, response) => {
     const context = {

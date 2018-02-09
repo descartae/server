@@ -4,6 +4,7 @@ const nodeExternals = require('webpack-node-externals')
 
 const DotEnvPlugin = require('dotenv-webpack')
 const StartServerPlugin = require('start-server-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const {
   BannerPlugin,
@@ -41,9 +42,20 @@ module.exports = [
         banner: 'require("source-map-support").install();',
         raw: true,
         entryOnly: false
-      })
+      }),
+      new CopyWebpackPlugin([
+        { from: 'src/resources', to: path.join(__dirname, 'build', 'resources'), force: true }
+      ])
     ]
   },
+  // {
+  //   entry: './src/resources/graphiql.html',
+  //   name: 'graphiql',
+  //   output: {
+  //     path: path.join(__dirname, 'build'),
+  //     filename: 'graphiql.html'
+  //   }
+  // },
   // Watch for changes and hot reload
   {
     entry: [
@@ -55,6 +67,10 @@ module.exports = [
     output: {
       path: path.join(__dirname, 'build'),
       filename: 'index.js'
+    },
+    node: {
+      __filename: true,
+      __dirname: true
     },
     target: 'node',
     devtool: 'source-map',
@@ -82,7 +98,10 @@ module.exports = [
         banner: 'require("source-map-support").install();',
         raw: true,
         entryOnly: false
-      })
+      }),
+      new CopyWebpackPlugin([
+        { from: 'src/resources', to: path.join(__dirname, 'build', 'resources'), force: true }
+      ])
     ]
   }
 ]
