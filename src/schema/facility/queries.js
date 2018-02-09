@@ -5,21 +5,26 @@ export const facilities =
       unresolved: false
     }
 
-    info
-      .fieldNodes[0]
-      .selectionSet
-      .selections
-      .find((i) => i.name.value === 'items')
-      .selectionSet
-      .selections
-      .find((i) => i.name.value === 'feedbacks')
-      .selectionSet
-      .selections
-      .map((i) => {
-        if (i.name.value in feedbacks) {
-          feedbacks[i.name.value] = true
-        }
-      })
+    const feedbacksField =
+      info
+        .fieldNodes[0]
+        .selectionSet
+        .selections
+        .find((i) => i.name.value === 'items')
+        .selectionSet
+        .selections
+        .find((i) => i.name.value === 'feedbacks')
+
+    if (feedbacksField) {
+      feedbacksField
+        .selectionSet
+        .selections
+        .map((i) => {
+          if (i.name.value in feedbacks) {
+            feedbacks[i.name.value] = true
+          }
+        })
+    }
 
     return facilities({ ...filters, feedbacks }, services)
   }
