@@ -116,7 +116,7 @@ export default ({ Users }) => ({
   async addWaitingUser ({ email, coordinates }) {
     const item = {
       email,
-      roles: ['USER'],
+      roles: [],
       coordinates: {
         type: 'Point',
         coordinates: [coordinates.longitude, coordinates.latitude]
