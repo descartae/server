@@ -1,19 +1,23 @@
 import { ObjectId } from 'mongodb'
 import { genSalt, hash } from 'bcryptjs'
+import { mongoConnector } from './mongo'
 
-export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks, ReverseGeocodingCache }) => {
-  // await Facilities.deleteMany({})
-  // await Users.deleteMany({})
-  // await TypesOfWaste.deleteMany({})
-  // await Feedbacks.deleteMany({})
-  // await ReverseGeocodingCache.deleteMany({})
+export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks, ReverseGeocodingCache }, opts = { force: false }) => {
+  const { force } = opts
+  if (force) {
+    await Facilities.deleteMany({})
+    await Users.deleteMany({})
+    await TypesOfWaste.deleteMany({})
+    await Feedbacks.deleteMany({})
+    await ReverseGeocodingCache.deleteMany({})
+  }
 
   const facilityCount = await Facilities.count()
   const userCount = await Users.count()
   const typesOfWasteCount = await TypesOfWaste.count()
 
   if (facilityCount === 0 && userCount === 0 && typesOfWasteCount === 0) {
-    console.log('No data found - seeding database')
+    !force && console.log('No data found - seeding database')
 
     const typesOfWaste = [
 
@@ -637,4 +641,10 @@ Por favor, verificar na interface!`
 
     console.log('Seeded!')
   }
+}
+
+export const seeder = async (mongodbUrl, secrets) => {
+  const collections = await mongoConnector.connect(mongodbUrl)
+
+  await seedDatabase(collections, { force: true })
 }

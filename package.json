@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "npm run build:digest && node build/index.js",
+    "seed": "npm run build:digest && node build/index.js --seed",
     "clean": "rm -rf build",
     "build:digest": "npm run clean && webpack --config-name digest",
     "build:watch": "npm run clean && webpack --config-name watch",
@@ -25,6 +26,7 @@
     "mongodb": "^2.2.33",
     "npm-run-all": "^4.1.1",
     "ramda": "^0.25.0",
+    "readline-sync": "^1.4.8",
     "source-map-support": "^0.5.0"
   },
   "devDependencies": {
