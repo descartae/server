@@ -1,7 +1,10 @@
 import { ObjectId } from 'mongodb'
 import { assertNotEmpty, assertAny } from './validation'
 
+const nearDistance = 20 // 20 kilometers
+
 export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
+
   // Root queries
   async facility (_id) {
     return Facilities.findOne({ _id })
@@ -37,11 +40,26 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
             },
             distanceField: 'distance',
             spherical: true,
-            maxDistance: 20000
+            maxDistance: nearDistance * 1000
           }
         },
         { $sort: { distance: reversed ? -1 : 1 } }
       ]
+
+      const hasRegions = await Facilities
+        .count({
+          enabled: true,
+          'location.coordinates': {
+            $near: {
+              $geometry: { type: 'Point', coordinates: [ longitude, latitude ] },
+              $maxDistance: nearDistance * 1000
+            }
+          }
+        })
+
+      if (hasRegions === 0) {
+        throw Error('REGION_NOT_SUPPORTED')
+      }
     } else {
       aggregation = [
         { $match: { ...query, ...pagination } },
