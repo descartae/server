@@ -1,8 +1,9 @@
 import express from 'express'
 import jwt from 'express-jwt'
 import cors from 'cors'
+import path from 'path'
 
-import { graphqlExpress, graphiqlExpress } from 'graphql-server-express'
+import { graphqlExpress } from 'graphql-server-express'
 import bodyParser from 'body-parser'
 
 import { mongoConnector } from './mongo'
@@ -37,7 +38,7 @@ export const createApp = async (mongodbUrl, secrets) => {
       }
     })
 
-  server.use('/graphiql', express.static(__dirname + '/resources/graphiql.html'))
+  server.use('/graphiql', express.static(path.join(__dirname, 'resources', 'graphiql.html')))
 
   server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress(async (request, response) => {
     const context = {
