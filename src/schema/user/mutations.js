@@ -63,7 +63,7 @@ export const updateUser =
   }
 
 export const addWaitingUser =
-  async (obj, { user: { email, coordinates } }, { models: { Users: { addWaitingUser } } }) => {
+  async (obj, { input: { email, coordinates } }, { models: { Users: { addWaitingUser } } }) => {
     const user = await addWaitingUser({ email, coordinates })
 
     if (!user) {
