@@ -1,3 +1,4 @@
+import { HttpQueryError } from 'apollo-server-core'
 
 export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
@@ -31,6 +32,30 @@ export const addUser =
     Auth.authorizeFor('ADMIN')
 
     const user = await addUser({ name, email, password, roles, coordinates }, { Auth })
+
+    if (!user) {
+      return {
+        success: false
+      }
+    }
+
+    return {
+      success: true,
+      user
+    }
+  }
+
+export const addSelfUser =
+  async (obj, { input: { name, email, password } }, {
+    models: { Users: { addUser } },
+    services: { Auth },
+    configuration: { signup: { enable, role } }
+  }) => {
+    if (!enable) {
+      throw new HttpQueryError(400, 'Bad request', true)
+    }
+
+    const user = await addUser({ name, email, password, roles: [ role ] }, { Auth })
 
     if (!user) {
       return {

@@ -13,7 +13,7 @@ import schema from './schema'
 
 import { seedDatabase } from './seed'
 
-export const createApp = async (mongodbUrl, secrets) => {
+export const createApp = async (mongodbUrl, secrets, options) => {
   const collections = await mongoConnector.connect(mongodbUrl)
 
   await seedDatabase(collections)
@@ -38,11 +38,15 @@ export const createApp = async (mongodbUrl, secrets) => {
       }
     })
 
+  server.get('/', function (req, res) {
+    res.redirect('/graphiql')
+  })
+
   server.use('/graphiql', express.static(path.join(__dirname, 'resources', 'graphiql.html')))
 
   server.use('/graphql', authMiddleware, bodyParser.json(), graphqlExpress(async (request, response) => {
     const context = {
-      configuration: { secrets },
+      configuration: { secrets, ...options },
       models: await createModels(collections),
       secrets
     }

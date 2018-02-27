@@ -3,6 +3,7 @@ import http from 'http'
 
 import { createApp } from './app'
 import { seeder } from './seed'
+import { any, equals } from 'ramda'
 
 // To be replaced by webpack - https://github.com/mrsteele/dotenv-webpack/issues/70
 const args = process.argv
@@ -11,7 +12,12 @@ const JWT_SECRET = process.env.JWT_SECRET
 const MONGODB_URL = process.env.MONGODB_URL
 const MAPS_API_KEY = process.env.MAPS_API_KEY
 
+const SIGNUP_ROLE = process.env.SIGNUP_ROLE
+const SIGNUP = process.env.SIGNUP === 'true' &&
+                 any(equals(SIGNUP_ROLE))(['ADMIN', 'MAINTAINER', 'USER'])
+
 const secrets = { JWT_SECRET, MAPS_API_KEY }
+const options = { signup: { enable: SIGNUP, role: SIGNUP_ROLE } }
 
 if (args.indexOf('--seed') > -1) {
   console.log('This operation will wipe out the database.')
@@ -27,7 +33,7 @@ if (args.indexOf('--seed') > -1) {
     process.exit(1)
   }
 } else {
-  createApp(MONGODB_URL, secrets)
+  createApp(MONGODB_URL, secrets, options)
     .then((createdApp) => {
       let currentApp = createdApp
       const server = http.createServer(currentApp)
@@ -37,7 +43,7 @@ if (args.indexOf('--seed') > -1) {
       if (module.hot) {
         module.hot.accept('./app', async () => {
           const { createApp } = require('./app')
-          const newApp = await createApp(MONGODB_URL, secrets)
+          const newApp = await createApp(MONGODB_URL, secrets, options)
 
           server.removeListener('request', currentApp)
           server.on('request', newApp)

@@ -52,6 +52,22 @@ export const schema = `
     INVALID_ROLES
   }
 
+  input AddSelfUserData {
+    name: String!
+    email: String!
+    password: String!
+  }
+
+  type AddSelfUserResult {
+    success: Boolean!
+    error: AddSelfUserFailureReason
+    user: User
+  }
+
+  enum AddSelfUserFailureReason {
+    DUPLICATED_EMAIL
+  }
+
   input AddWaitingUserData {
     email: String!
     coordinates: CoordinatesInput!
@@ -104,6 +120,7 @@ export const queryExtension = `
 export const mutationExtension = `
   authenticate(credentials: AuthenticationData!): AuthenticationResult!
   addUser(input: AddUserData!): AddUserResult!
+  addSelfUser(input: AddSelfUserData!): AddSelfUserResult!
   addWaitingUser(input: AddWaitingUserData!): AddWaitingUserResult!
   updateUser(input: UpdateUserInput!): UpdateUserPayload!
 `
