@@ -7,7 +7,7 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
 
   // Root queries
   async facility (_id) {
-    return Facilities.findOne({ _id })
+    return Facilities.findOne({ _id, enabled: true })
   },
   async facilities ({ cursor, location, hasTypesOfWaste, feedbacks }, { Geolocation }) {
     const query = {
