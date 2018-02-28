@@ -3,11 +3,64 @@ import { assertNotEmpty, assertAny } from './validation'
 
 const nearDistance = 20 // 20 kilometers
 
+const feedbacksRetriever = async (model, fields, ids) => {
+  const counting = {}
+
+  if (fields.total || fields.unresolved) {
+    // Filter only unresolved if filter is nos asking for total
+    let resolvedQuery = {}
+    if (!fields.total) {
+      resolvedQuery = { resolved: false }
+    }
+
+    const countQuery = {}
+    if (fields.total) {
+      countQuery.total = { $sum: 1 }
+    }
+    if (fields.unresolved) {
+      countQuery.unresolved = { $sum: { $cond: { if: '$resolved', then: 0, else: 1 } } }
+    }
+
+    const aggregation =
+      await model
+        .aggregate([
+          { $match: { facility: { $in: ids }, ...resolvedQuery } },
+          { $group: { _id: '$facility', ...countQuery } }
+        ])
+        .toArray()
+
+    const defaultobject = {}
+    if (fields.total) {
+      defaultobject.total = 0
+    }
+    if (fields.unresolved) {
+      defaultobject.unresolved = 0
+    }
+
+    for (const id of ids) {
+      counting[id] = { ...defaultobject }
+    }
+
+    for (const counts of aggregation) {
+      const id = counts._id
+      delete counts._id
+      counting[id] = { ...counting[id], ...counts }
+    }
+  }
+
+  return counting
+}
+
 export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
 
   // Root queries
-  async facility (_id) {
-    return Facilities.findOne({ _id, enabled: true })
+  async facility (_id, { feedbacks }) {
+    const facility = await Facilities.findOne({ _id, enabled: true })
+    if (facility) {
+      const feedbackCount = await feedbacksRetriever(Feedbacks, feedbacks, [facility._id])
+      facility.feedbacks = feedbackCount[facility._id]
+    }
+    return facility
   },
   async facilities ({ cursor, location, hasTypesOfWaste, feedbacks }, { Geolocation }) {
     const query = {
@@ -88,48 +141,10 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
       cursors.before = first._id.toString()
       cursors.after = last._id.toString()
 
-      if (feedbacks.total || feedbacks.unresolved) {
-        // Filter only unresolved if filter is nos asking for total
-        let resolvedQuery = {}
-        if (!feedbacks.total) {
-          resolvedQuery = { resolved: false }
-        }
-
-        const countQuery = {}
-        if (feedbacks.total) {
-          countQuery.total = { $sum: 1 }
-        }
-        if (feedbacks.unresolved) {
-          countQuery.unresolved = { $sum: { $cond: { if: '$resolved', then: 0, else: 1 } } }
-        }
-
-        const ids = items.map(i => i._id)
-        const aggregation =
-          await Feedbacks
-            .aggregate([
-              { $match: { facility: { $in: ids }, ...resolvedQuery } },
-              { $group: { _id: '$facility', ...countQuery } }
-            ])
-            .toArray()
-
-        // Caution: mutability ahead
-        const defaultobject = {}
-        if (feedbacks.total) {
-          defaultobject.total = 0
-        }
-        if (feedbacks.unresolved) {
-          defaultobject.unresolved = 0
-        }
-
-        for (const item of items) {
-          item.feedbacks = { ...defaultobject }
-        }
-
-        for (const counts of aggregation) {
-          const item = items.find(i => i._id.equals(counts._id))
-          delete counts._id
-          item.feedbacks = { ...item.feedbacks, ...counts }
-        }
+      const ids = items.map(i => i._id)
+      const feedbackCount = await feedbacksRetriever(Feedbacks, feedbacks, ids)
+      for (const item of items) {
+        item.feedbacks = feedbackCount[item._id]
       }
     }
 
@@ -139,7 +154,7 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
     }
   },
   // Operations
-  async addFacility (data, { Geolocation }) {
+  async addFacility (data, { feedbacks }, { Geolocation }) {
     assertNotEmpty(data.name, 'name')
     assertNotEmpty((data.location || {}).address, 'location.address')
 
@@ -172,12 +187,17 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
 
     const { ops: [facility] } = await Facilities.insert(data)
 
+    if (facility) {
+      const feedbackCount = await feedbacksRetriever(Feedbacks, feedbacks, [facility._id])
+      facility.feedbacks = feedbackCount[facility._id]
+    }
+
     return {
       success: true,
       facility
     }
   },
-  async updateFacility ({ _id, patch }, { Geolocation }) {
+  async updateFacility ({ _id, patch }, { feedbacks }, { Geolocation }) {
     if ('name' in patch) {
       assertNotEmpty(patch.name, 'name')
     }
@@ -220,6 +240,11 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
       }, {
         returnOriginal: false
       })
+
+    if (value) {
+      const feedbackCount = await feedbacksRetriever(Feedbacks, feedbacks, [value._id])
+      value.feedbacks = feedbackCount[value._id]
+    }
 
     return {
       success: true,
