@@ -17,14 +17,16 @@ export const feedbackFields = (facilityFields, fragments) => {
             .find((i) => i.name.value === 'feedbacks')
     }
 
-    feedbacksField
-        .selectionSet
-        .selections
-        .map((i) => {
-          if (i.name.value in feedbacks) {
-            feedbacks[i.name.value] = true
-          }
-        })
+    if (feedbacksField) {
+      feedbacksField
+          .selectionSet
+          .selections
+          .map((i) => {
+            if (i.name.value in feedbacks) {
+              feedbacks[i.name.value] = true
+            }
+          })
+    }
   }
 
   return feedbacks
