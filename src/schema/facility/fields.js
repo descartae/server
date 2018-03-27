@@ -7,3 +7,10 @@ export const location = async ({ location }, args, ctx, info) => {
   location.coordinates = { latitude, longitude }
   return location
 }
+
+export const openHours = async ({ openHours }, args, ctx, info) => {
+  if (!openHours) {
+    return []
+  }
+  return openHours
+}
