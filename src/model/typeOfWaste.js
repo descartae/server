@@ -4,14 +4,16 @@ import { ObjectId } from 'mongodb'
 
 export default ({ TypesOfWaste }) => {
   const batcher =
-    async (ids) =>
-      TypesOfWaste
-      .find({
-        _id: {
-          $in: ids.map(id => id instanceof ObjectId ? id : ObjectId(id))
-        }
-      })
-      .toArray()
+    async (ids) => {
+      const mongoIds = ids.map(id => id instanceof ObjectId ? id : ObjectId(id))
+      const types = await TypesOfWaste
+                            .find({
+                              _id: { $in: mongoIds }
+                            })
+                            .toArray()
+
+      return mongoIds.map(id => types.find(t => t._id.equals(id)) || null)
+    }
 
   const options = {
     cacheKeyFn: (key) => key.toString()
