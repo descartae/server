@@ -68,7 +68,7 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
     }
 
     if (hasTypesOfWaste != null && hasTypesOfWaste.length > 0) {
-      query.typesOfWaste = { $in: hasTypesOfWaste }
+      query.typesOfWaste = { $in: hasTypesOfWaste.map(ObjectId) }
     }
 
     const pagination = {}
@@ -121,6 +121,8 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
     }
 
     const quantity = Math.max(Math.min(cursor.quantity, 100), 1)
+
+    console.log(JSON.stringify(aggregation))
 
     const items =
       await Facilities
