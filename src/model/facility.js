@@ -71,18 +71,27 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
       query.typesOfWaste = { $in: hasTypesOfWaste.map(ObjectId) }
     }
 
+    const { before, after } = cursor
+
+    let field = '_id'
     const pagination = {}
-    let reversed = false
-    if (cursor.after) {
-      pagination._id = { $gt: ObjectId(cursor.after) }
-    } else if (cursor.before) {
-      reversed = true
-      pagination._id = { $lt: ObjectId(cursor.before) }
-    }
 
     let aggregation
+    let reversed = false
+
     if (location != null && location.near != null) {
       const { latitude, longitude } = location.near
+      field = 'distance'
+
+      let minDistance = 0
+      let maxDistance = nearDistance * 1000
+      if (after && after.field === 'distance') {
+        minDistance = after.value + 0.00001
+      } else if (before && before.field === 'distance') {
+        reversed = true
+        maxDistance = before.value - 0.00001
+      }
+
       aggregation = [
         {
           $geoNear: {
@@ -93,7 +102,8 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
             },
             distanceField: 'distance',
             spherical: true,
-            maxDistance: nearDistance * 1000
+            maxDistance,
+            minDistance
           }
         },
         { $sort: { distance: reversed ? -1 : 1 } }
@@ -114,6 +124,13 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
         throw Error('REGION_NOT_SUPPORTED')
       }
     } else {
+      if (after && after.field === '_id') {
+        pagination._id = { $gt: ObjectId(after.value) }
+      } else if (before && before.field === '_id') {
+        reversed = true
+        pagination._id = { $lt: ObjectId(before.value) }
+      }
+
       aggregation = [
         { $match: { ...query, ...pagination } },
         { $sort: { _id: reversed ? -1 : 1 } }
@@ -121,8 +138,6 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
     }
 
     const quantity = Math.max(Math.min(cursor.quantity, 100), 1)
-
-    console.log(JSON.stringify(aggregation))
 
     const items =
       await Facilities
@@ -133,22 +148,29 @@ export default ({ Facilities, Feedbacks, ReverseGeocodingCache }) => ({
         .toArray()
 
     const cursors = {
-      before: cursor.before,
-      after: cursor.after
+      before: { field, value: after ? after.value : 0 },
+      after: { field, value: before ? before.value : 0 },
     }
 
-    if (items.length) {
+    if (items.length > 0) {
       const first = reversed ? items[items.length - 1] : items[0]
       const last = reversed ? items[0] : items[items.length - 1]
-      cursors.before = first._id.toString()
-      cursors.after = last._id.toString()
+
+      cursors.before = { field, value: first[field] }
+      cursors.after = { field, value: last[field] }
 
       const ids = items.map(i => i._id)
       const feedbackCount = await feedbacksRetriever(Feedbacks, feedbacks, ids)
       for (const item of items) {
         item.feedbacks = feedbackCount[item._id]
       }
+    } else {
+      cursors.before = before ? before : null
+      cursors.after = after ? after : null
     }
+
+    cursors.before = cursors.before ? cursors.before : cursors.after
+    cursors.after = cursors.after ? cursors.after : cursors.before
 
     return {
       cursors,

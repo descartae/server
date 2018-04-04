@@ -29,6 +29,11 @@ export const schema = `
   }
 `
 
+const btoa = (obj) => new Buffer(JSON.stringify(obj)).toString('base64')
+const atob = (enc) => JSON.parse(new Buffer(enc, 'base64').toString())
+// const btoa = (obj) => JSON.stringify(obj)
+// const atob = (enc) => JSON.parse(enc)
+
 export const resolvers = {
   ID: {
     __parseValue (value) {
@@ -51,14 +56,14 @@ export const resolvers = {
   },
   Cursor: {
     __parseValue (value) {
-      return Buffer.from(value, 'base64').toString('ascii')
+      return atob(value)
     },
     __serialize (value) {
-      return Buffer.from(value).toString('base64')
+      return btoa(value)
     },
     __parseLiteral (ast) {
       if (ast.kind === Kind.STRING) {
-        return Buffer.from(ast.value, 'base64').toString('ascii')
+        return atob(ast.value)
       }
 
       return null
