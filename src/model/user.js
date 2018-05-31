@@ -52,7 +52,7 @@ export default ({ Users }) => ({
     }
   },
   // Operations
-  async addUser ({ name, email, password, roles, coordinates }, { Auth }) {
+  async addUser ({ name, email, password, title, organization, municipality, roles, coordinates }, { Auth }) {
     const userCheck = await Users.findOne({ email })
     if (userCheck) {
       throw Error('DUPLICATED_EMAIL')
@@ -61,11 +61,17 @@ export default ({ Users }) => ({
     assertNotEmpty(name, 'name')
     assertNotEmpty(email, 'email')
     assertNotEmpty(password, 'password')
+    assertNotEmpty(title, 'title')
+    assertNotEmpty(organization, 'organization')
+    assertNotEmpty(municipality, 'municipality')
 
     const item = {
       name,
       email,
       password: await Auth.hashPassword(password),
+      title,
+      organization,
+      municipality,
       roles,
       coordinates:
         coordinates ? {
@@ -95,6 +101,18 @@ export default ({ Users }) => ({
       patch.password = await Auth.hashPassword(patch.password)
     } else {
       delete patch.password
+    }
+
+    if ('title' in patch) {
+      assertNotEmpty(patch.title, 'title')
+    }
+
+    if ('organization' in patch) {
+      assertNotEmpty(patch.organization, 'organization')
+    }
+
+    if ('municipality' in patch) {
+      assertNotEmpty(patch.municipality, 'municipality')
     }
 
     if ('roles' in patch) {
