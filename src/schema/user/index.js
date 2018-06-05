@@ -14,6 +14,9 @@ export const schema = `
     _id: ID!
     name: String!
     email: String!
+    title: String!
+    organization: String!
+    municipality: String!
     roles: [Role]!
     coordinates: Coordinates
   }
@@ -37,6 +40,9 @@ export const schema = `
     name: String!
     email: String!
     password: String!
+    title: String!
+    organization: String!
+    municipality: String!
     roles: [Role]!
     coordinates: CoordinatesInput
   }
@@ -56,6 +62,9 @@ export const schema = `
     name: String!
     email: String!
     password: String!
+    title: String!
+    organization: String!
+    municipality: String!
   }
 
   type AddSelfUserResult {
@@ -91,6 +100,9 @@ export const schema = `
     name: String
     email: String
     password: String
+    title: String!
+    organization: String!
+    municipality: String!
     roles: [Role]
     coordinates: CoordinatesInput
   }

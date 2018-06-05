@@ -28,10 +28,10 @@ export const authenticate =
   }
 
 export const addUser =
-  async (obj, { input: { name, email, password, roles, coordinates } }, { models: { Users: { addUser } }, services: { Auth } }) => {
+  async (obj, { input: { name, email, password, roles, title, organization, municipality, coordinates } }, { models: { Users: { addUser } }, services: { Auth } }) => {
     Auth.authorizeFor('ADMIN')
 
-    const user = await addUser({ name, email, password, roles, coordinates }, { Auth })
+    const user = await addUser({ name, email, password, title, organization, municipality, roles, coordinates }, { Auth })
 
     if (!user) {
       return {
@@ -46,7 +46,7 @@ export const addUser =
   }
 
 export const addSelfUser =
-  async (obj, { input: { name, email, password } }, {
+  async (obj, { input: { name, email, password, title, organization, municipality } }, {
     models: { Users: { addUser } },
     services: { Auth },
     configuration: { signup: { enable, role } }
@@ -55,7 +55,7 @@ export const addSelfUser =
       throw new HttpQueryError(400, 'Bad request', true)
     }
 
-    const user = await addUser({ name, email, password, roles: [ role ] }, { Auth })
+    const user = await addUser({ name, email, password, title, organization, municipality, roles: [ role ] }, { Auth })
 
     if (!user) {
       return {

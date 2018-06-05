@@ -193,6 +193,9 @@ export const seedDatabase = async ({ Facilities, Users, TypesOfWaste, Feedbacks,
       _id: new ObjectId(),
       name: 'Example User',
       email: 'user@example.com',
+      title: 'Example Admin',
+      organization: 'Example Organization',
+      municipality: 'Example City',
       password: await hash('example', await genSalt(12)),
       roles: ['ADMIN']
     }
