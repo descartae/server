@@ -4,6 +4,8 @@ import { HttpQueryError } from 'apollo-server-core'
 import { compare, genSalt, hash } from 'bcryptjs'
 
 export default ({ user, configuration: { secrets: { JWT_SECRET } } }) => ({
+  logged: () => user,
+
   hasAnyRole (...roles) {
     return user && any((role) => any(equals(role))(roles))(user.roles)
   },

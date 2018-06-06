@@ -71,7 +71,17 @@ export const addSelfUser =
 
 export const updateUser =
   async (obj, { input }, { services, services: { Auth }, models: { Users: { updateUser } } }, info) => {
-    Auth.authorizeFor('ADMIN')
+    const logged = Auth.logged()
+
+    if (input._id == logged.id) {
+      // Normal users cannot update its own roles
+      if ('roles' in input.patch) {
+        Auth.authorizeFor('ADMIN')
+      }
+    } else {
+      // Only admin can update another user
+      Auth.authorizeFor('ADMIN')
+    }
 
     const user = await updateUser(input, { Auth })
 
