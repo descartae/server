@@ -100,9 +100,9 @@ export const schema = `
     name: String
     email: String
     password: String
-    title: String!
-    organization: String!
-    municipality: String!
+    title: String
+    organization: String
+    municipality: String
     roles: [Role]
     coordinates: CoordinatesInput
   }
