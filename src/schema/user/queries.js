@@ -15,7 +15,7 @@ export const users =
   }
 
 export const user =
-  (obj, { _id }, { models: { Users: { user } }, services: { Auth } }, info) {
+  (obj, { _id }, { models: { Users: { user } }, services: { Auth } }, info) => {
     if (Auth.logged().id !== _id) {
         Auth.authorizeFor('ADMIN')
     }
