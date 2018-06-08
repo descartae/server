@@ -1,4 +1,5 @@
 import { HttpQueryError } from 'apollo-server-core'
+import { all, any, equals } from 'ramda'
 
 export const authenticate =
   async (obj, { credentials: { email, password } }, { models: { Users: { userByEmail } }, services: { Auth } }) => {
@@ -74,8 +75,10 @@ export const updateUser =
     const logged = Auth.logged()
 
     if (input._id == logged.id) {
-      // Normal users cannot update its own roles
-      if ('roles' in input.patch) {
+      // An user cannot add new roles for itself, just remove it
+      const checkRoles = (currentRoles, newRoles) => all((role) => any(equals(role))(currentRoles))(newRoles)
+
+      if ('roles' in input.patch && !checkRoles(logged.roles, input.patch.roles)) {
         Auth.authorizeFor('ADMIN')
       }
     } else {
