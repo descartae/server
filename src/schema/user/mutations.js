@@ -75,7 +75,11 @@ export const updateUser =
     const logged = Auth.logged()
 
     if (input._id == logged.id) {
-      // An user cannot add new roles for itself, just remove it
+      // A user cannot add new roles for itself, just remove it
+      // checkRoles returns true or false
+      // it checks if, for every inputted role, it should be in the current roles of the user
+      // if the function returns false, not every inputted role is in the current set of roles
+      // otherwise, it will return true
       const checkRoles = (currentRoles, newRoles) => all((role) => any(equals(role))(currentRoles))(newRoles)
 
       if ('roles' in input.patch && !checkRoles(logged.roles, input.patch.roles)) {
