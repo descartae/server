@@ -9,8 +9,12 @@ export default ({ Users }) => ({
   async userByEmail (email) {
     return Users.findOne({ email })
   },
-  async users ({ hasRole, cursor }) {
+  async users ({ _id, hasRole, cursor }) {
     const query = {}
+    
+    if (_id !== undefined) {
+      query._id = _id
+    }
 
     if (hasRole !== undefined) {
       query.roles = { $exists: hasRole, [hasRole ? '$ne' : '$eq']: [] }
