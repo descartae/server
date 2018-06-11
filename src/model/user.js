@@ -13,7 +13,7 @@ export default ({ Users }) => ({
     const query = {}
     
     if (_id !== undefined) {
-      query._id = _id
+      query._id = ObjectId(_id)
     }
 
     if (hasRole !== undefined) {
